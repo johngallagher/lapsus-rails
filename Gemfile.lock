@@ -36,8 +36,6 @@ GEM
       erubis (>= 2.6.6)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    bourne (1.1.2)
-      mocha (= 0.10.5)
     builder (3.0.4)
     coderay (1.0.9)
     coffee-rails (3.2.2)
@@ -77,11 +75,8 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    metaclass (0.0.1)
     method_source (0.8.1)
     mime-types (1.23)
-    mocha (0.10.5)
-      metaclass (~> 0.0.1)
     multi_json (1.7.7)
     mysql2 (0.3.11)
     newrelic_rpm (3.5.5.38)
@@ -146,9 +141,8 @@ GEM
     sendgrid (1.2.0)
       json
       json
-    shoulda-matchers (1.4.2)
+    shoulda-matchers (2.2.0)
       activesupport (>= 3.0.0)
-      bourne (~> 1.1.2)
     simple_form (2.1.0)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
@@ -199,7 +193,7 @@ DEPENDENCIES
   rspec-rails (>= 2.12.2)
   sass-rails (~> 3.2.3)
   sendgrid
-  shoulda-matchers (~> 1.4.2)
+  shoulda-matchers
   simple_form (>= 2.1.0)
   thin (>= 1.5.0)
   uglifier (>= 1.0.3)

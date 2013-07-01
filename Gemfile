@@ -34,7 +34,7 @@ end
 group :test do
   gem 'database_cleaner', '>= 0.9.1'
   gem 'email_spec', '>= 1.4.0'
-  gem 'shoulda-matchers', '~> 1.4.2'
+  gem 'shoulda-matchers'
 end
 
 group :production do
