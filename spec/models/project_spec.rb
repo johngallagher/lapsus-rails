@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe Product do
+describe Project do
   it { should respond_to :name }
 end
