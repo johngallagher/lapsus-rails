@@ -7,4 +7,5 @@ describe Trainer do
   When { Trainer.new(entry, project).train }
 
   Then { entry.should be_trained }
+  Then { entry.project.should == project }
 end

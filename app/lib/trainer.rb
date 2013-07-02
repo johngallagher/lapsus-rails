@@ -5,6 +5,7 @@ class Trainer
   end
 
   def train
+    @entry.project = @project
     @entry.trained = true
     @entry.save
   end
