@@ -4,6 +4,7 @@ FactoryGirl.define do
   factory :entry do
     started_at "2013-07-01 18:23:47"
     finished_at "2013-07-01 18:23:47"
+    url "file://Users/John/Documents/WhyILoveCheese.md"
     project_id 1
   end
 end
