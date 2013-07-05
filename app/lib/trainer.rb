@@ -5,6 +5,7 @@ class Trainer
   end
 
   def train
+    Rule.create(url: @entry.url)
     @entry.project = @project
     @entry.trained = true
     @entry.save

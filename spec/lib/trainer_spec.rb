@@ -8,4 +8,5 @@ describe Trainer do
 
   Then { entry.should be_trained }
   Then { entry.project.should == project }
+  Then { Rule.all.count.should == 1 }
 end
