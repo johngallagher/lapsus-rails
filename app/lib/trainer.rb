@@ -5,7 +5,17 @@ class Trainer
   end
 
   def train
+    remember_rule
+    train_entry
+  end
+
+  private
+
+  def remember_rule
     Rule.create(url: @entry.url)
+  end
+
+  def train_entry
     @entry.project = @project
     @entry.trained = true
     @entry.save
