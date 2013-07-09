@@ -1,28 +1,21 @@
 require 'spec_helper'
 
 describe Trainer do
-  Given { Rule.destroy_all}
-  Given(:entry)   { FactoryGirl.create(:entry) }
-  Given(:video_project) { FactoryGirl.create(:project, name: "Video") }
-  Given(:newsroom_project) { FactoryGirl.create(:project, name: "Newsroom") }
+  Given(:entry)     { FactoryGirl.create(:entry) }
+  Given(:video)     { FactoryGirl.create(:project, name: "Video") }
+  Given(:newsroom)  { FactoryGirl.create(:project, name: "Newsroom") }
+  
+  describe ".train" do
+    When { Trainer.new(entry, video).train }
 
-  context "no previous rules" do
-    When { Trainer.new(entry, video_project).train }
+    Then { entry.should be_trained_for_project(video) }
+    Then { Rule.should have(1).items }
 
-    Then { entry.should be_trained }
-    Then { entry.project.should == video_project }
-    Then { Rule.all.should have(1).items }
-    Then { Rule.first.url.should == entry.url }    
-  end
+    context "trained for newsroom" do
+      Given { FactoryGirl.create(:rule, url: entry.url, project: newsroom) }
 
-  context "entry has already been trained for newsroom" do
-    Given!(:newsroom_rule)    { FactoryGirl.create(:rule, url: entry.url, project: newsroom_project) }
-    
-    When { Trainer.new(entry, video_project).train }
-
-    Then { entry.should be_trained }
-    Then { entry.project.should == video_project }
-    Then { Rule.all.should have(1).items }
-    Then { Rule.first.project.should == video_project }
+      Then { entry.should be_trained_for_project(video) }
+      Then { Rule.should have(1).items }
+    end
   end
 end
