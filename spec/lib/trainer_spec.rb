@@ -8,6 +8,6 @@ describe Trainer do
 
   Then { entry.should be_trained }
   Then { entry.project.should == project }
-  Then { Rule.all.count.should == 1 }
+  Then { Rule.all.should have(1).items }
   Then { Rule.first.url.should == entry.url }
 end
