@@ -12,8 +12,9 @@ class Trainer
   private
 
   def remember_rule
-    Rule.destroy_all
-    Rule.create(url: @entry.url, project: @project)
+    rule = Rule.where(url: @entry.url).first_or_create
+    rule.project = @project
+    rule.save
   end
 
   def train_entry
