@@ -12,7 +12,8 @@ class Trainer
   private
 
   def remember_rule
-    Rule.create(url: @entry.url)
+    Rule.destroy_all
+    Rule.create(url: @entry.url, project: @project)
   end
 
   def train_entry
