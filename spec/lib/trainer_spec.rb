@@ -23,7 +23,7 @@ describe Trainer do
       end
 
       context "parent folder trained for newsroom" do
-        Given(:newsroom_rule) { FactoryGirl.create(:rule, :folder, project: newsroom) }
+        Given!(:newsroom_rule) { FactoryGirl.create(:rule, :folder, project: newsroom) }
 
         Then { entry.should be_trained_for_project(video) }
         Then { Rule.should have(1).items }
