@@ -5,6 +5,7 @@ class Trainer
   end
 
   def train
+    destroy_conflicting_rules
     remember_rule
     train_entry
   end
@@ -21,5 +22,14 @@ class Trainer
     @entry.project = @project
     @entry.trained = true
     @entry.save
+  end
+
+  def destroy_conflicting_rules
+    parent_url = Pathname.new(@entry.url).parent.to_s
+    conflicting_rules = Rule.where(url: parent_url)
+    if conflicting_rules.any?
+      conflicting_rules.destroy_all
+      Rails.logger.warn("Conflicting rules detected - destroying.")
+    end
   end
 end

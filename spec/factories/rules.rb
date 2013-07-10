@@ -5,11 +5,11 @@ FactoryGirl.define do
     project_id 1
     
     trait :document do
-      url "file://Users/John/Documents/WhyILoveCheese.md"
+      url "/Users/John/Documents/WhyILoveCheese.md"
     end
 
     trait :folder do
-      url "file://Users/John/Documents/"
+      url "/Users/John/Documents"
     end
   end
 end
