@@ -5,14 +5,14 @@ class Trainer
   end
 
   def train
-    destroy_conflicting_rules
-    remember_rule
+    remove_conflicts
+    create_rule
     train_entry
   end
 
   private
 
-  def remember_rule
+  def create_rule
     rule = Rule.where(url: @entry.url).first_or_create
     rule.project = @project
     rule.save
@@ -24,12 +24,13 @@ class Trainer
     @entry.save
   end
 
-  def destroy_conflicting_rules
-    parent_url = Pathname.new(@entry.url).parent.to_s
-    conflicting_rules = Rule.where(url: parent_url)
-    if conflicting_rules.any?
-      conflicting_rules.destroy_all
-      Rails.logger.warn("Conflicting rules detected - destroying.")
-    end
+  def remove_conflicts
+    Rule.where(url: ancestors).destroy_all
+  end
+
+  def ancestors
+    ancestors = []
+    Pathname.new(@entry.url).ascend { |p| ancestors << p.to_s }
+    ancestors    
   end
 end

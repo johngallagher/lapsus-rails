@@ -2,6 +2,14 @@
 
 FactoryGirl.define do
   factory :project do
-    name "Video"
+    name "Project"
+
+    trait :video do
+      name "Video"
+    end
+
+    trait :newsroom do
+      name "Newsroom"
+    end
   end
 end

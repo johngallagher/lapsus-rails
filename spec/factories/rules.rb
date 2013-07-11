@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :rule do
-    project_id 1
+    project { create(:project)}
     
     trait :document do
       url { build(:entry, :document).url }

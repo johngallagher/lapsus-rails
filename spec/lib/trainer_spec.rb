@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Trainer do
-  Given(:video)     { FactoryGirl.create(:project, name: "Video") }
-  Given(:newsroom)  { FactoryGirl.create(:project, name: "Newsroom") }
+  Given(:video)     { FactoryGirl.create(:project, :video) }
+  Given(:newsroom)  { FactoryGirl.create(:project, :newsroom) }
 
   describe ".train" do
     When { Trainer.new(entry, video).train }
@@ -15,19 +15,25 @@ describe Trainer do
         Then { Rule.should have(1).items }
       end
 
-      context "trained for newsroom" do
-        Given { FactoryGirl.create(:rule, :document, project: newsroom) }
+      context "a conflicting rule at this level" do
+        Given { FactoryGirl.create(:rule, :document) }
 
         Then { entry.should be_trained_for_project(video) }
         Then { Rule.should have(1).items }
       end
 
-      context "with a conflicting rule one level up" do
-        Given!(:newsroom_rule) { FactoryGirl.create(:rule, :parent, project: newsroom) }
+      context "a conflicting rule one level up" do
+        Given { FactoryGirl.create(:rule, :parent) }
 
         Then { entry.should be_trained_for_project(video) }
         Then { Rule.should have(1).items }
-        Then { newsroom_rule.should be_destroyed }
+      end
+
+      context "a conflicting rule two levels up" do
+        Given { FactoryGirl.create(:rule, :grandparent) }
+
+        Then { entry.should be_trained_for_project(video) }
+        Then { Rule.should have(1).items }
       end
     end
   end
