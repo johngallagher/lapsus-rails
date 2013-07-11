@@ -7,7 +7,7 @@ class Trainer
   def train
     remove_conflicts
     create_rule
-    train_entry
+    update_entry
   end
 
   private
@@ -18,14 +18,23 @@ class Trainer
     rule.save
   end
 
-  def train_entry
+  def update_entry
     @entry.project = @project
     @entry.trained = true
     @entry.save
   end
 
   def remove_conflicts
+    remove_conflicting_ancestors
+    remove_conflicting_descendants
+  end
+
+  def remove_conflicting_ancestors
     Rule.where(url: ancestors).destroy_all
+  end
+
+  def remove_conflicting_descendants
+    Rule.where("url LIKE :prefix", prefix: "#{@entry.url}%").destroy_all
   end
 
   def ancestors

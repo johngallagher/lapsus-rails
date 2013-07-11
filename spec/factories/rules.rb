@@ -15,5 +15,17 @@ FactoryGirl.define do
     trait :grandparent do
       url { build(:entry, :grandparent).url }
     end
+
+    trait :folder do
+      url { build(:entry, :folder).url }
+    end
+
+    trait :child do
+      url { build(:entry, :child).url }
+    end
+
+    trait :grandchild do
+      url { build(:entry, :grandchild).url }
+    end
   end
 end

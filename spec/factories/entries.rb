@@ -17,5 +17,17 @@ FactoryGirl.define do
     trait :grandparent do
       url "/Users/John"
     end
+
+    trait :folder do
+      url "/Users/John"
+    end
+
+    trait :child do
+      url "/Users/John/Documents"
+    end
+
+    trait :grandchild do
+      url "/Users/John/Documents/WhyILoveCheese.md"
+    end
   end
 end
