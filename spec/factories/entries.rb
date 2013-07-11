@@ -10,8 +10,12 @@ FactoryGirl.define do
       url "/Users/John/Documents/WhyILoveCheese.md"
     end
 
-    trait :folder do
+    trait :parent do
       url "/Users/John/Documents"
+    end
+
+    trait :grandparent do
+      url "/Users/John"
     end
   end
 end

@@ -22,8 +22,8 @@ describe Trainer do
         Then { Rule.should have(1).items }
       end
 
-      context "with a conflicting rule at a higher level" do
-        Given!(:newsroom_rule) { FactoryGirl.create(:rule, :folder, project: newsroom) }
+      context "with a conflicting rule one level up" do
+        Given!(:newsroom_rule) { FactoryGirl.create(:rule, :parent, project: newsroom) }
 
         Then { entry.should be_trained_for_project(video) }
         Then { Rule.should have(1).items }

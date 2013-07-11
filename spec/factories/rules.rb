@@ -5,11 +5,15 @@ FactoryGirl.define do
     project_id 1
     
     trait :document do
-      url "/Users/John/Documents/WhyILoveCheese.md"
+      url { build(:entry, :document).url }
     end
 
-    trait :folder do
-      url "/Users/John/Documents"
+    trait :parent do
+      url { build(:entry, :parent).url }
+    end
+
+    trait :grandparent do
+      url { build(:entry, :grandparent).url }
     end
   end
 end
