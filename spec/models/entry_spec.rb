@@ -7,4 +7,5 @@ describe Entry do
   it { should respond_to :trained }
 
   it { should belong_to :project }
+  it { should belong_to :group }
 end
