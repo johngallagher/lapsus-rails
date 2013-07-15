@@ -1,5 +1,5 @@
 class Group < ActiveRecord::Base
-  attr_accessor :url
+  attr_accessible :url, :entries
 
   has_many :entries  
 end

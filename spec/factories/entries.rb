@@ -29,5 +29,13 @@ FactoryGirl.define do
     trait :grandchild do
       url "/Users/John/Documents/WhyILoveCheese.md"
     end
+
+    trait :trained do
+      trained true
+    end
+
+    trait :untrained do
+      trained false
+    end
   end
 end
