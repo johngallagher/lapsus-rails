@@ -1,6 +1,9 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
+document_parent_url = "/Users/John/Documents"
+
 FactoryGirl.define do
+
   factory :entry do
     started_at "2013-07-01 18:23:47"
     finished_at "2013-07-01 18:23:47"
@@ -10,8 +13,12 @@ FactoryGirl.define do
       url "/Users/John/Documents/WhyILoveCheese.md"
     end
 
+    trait :document_aunt do
+      url "/Users/John/Pictures"
+    end
+
     trait :parent do
-      url "/Users/John/Documents"
+      url document_parent_url
     end
 
     trait :grandparent do

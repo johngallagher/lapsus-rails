@@ -8,6 +8,10 @@ FactoryGirl.define do
       url { build(:entry, :document).url }
     end
 
+    trait :document_aunt do
+      url { build(:entry, :document_aunt).url }
+    end
+
     trait :parent do
       url { build(:entry, :parent).url }
     end
