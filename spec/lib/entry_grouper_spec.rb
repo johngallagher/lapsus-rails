@@ -4,26 +4,21 @@ describe EntryGrouper do
 
   describe ".group" do
     context "one entry" do
-      Given!(:entry) { FactoryGirl.create(:entry, :document, :untrained) }
-      
+      Given!(:entry) { FactoryGirl.create(:entry, :cheese_document, :untrained) }
+
       When { EntryGrouper.new.group }    
+
+      Then { Group.first.entries.should == [entry] }
+      Then { Group.should have(1).group }
 
       context "no rules" do
         Then { Group.first.url.should == entry.url }
-        Then { Group.first.entries.should == [entry] }
-        Then { Group.should have(1).group }
       end
 
-      context "one rule for the parents sibling" do
-        Given!(:rule) { FactoryGirl.create(:rule, :document_aunt)}
+      context "one rule for documents" do
+        Given!(:rule) { FactoryGirl.create(:rule, :documents_folder)}
 
-        Then { Group.first.url.should == document_parent_url } # Define parent url
-        Then { Group.first.entries.should == [entry] }
-        Then { Group.should have(1).group }
-      end
-
-      context "context" do
-
+        Then { Group.first.url.should == rule.url }
       end
     end
   end  
