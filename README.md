@@ -39,6 +39,85 @@ Questions
 * What browsers do we support?
 
 
+2. Setup or edit project container folders
+
+From wireframe:
+
+User adds a project container
+
+* User selects Projects in top nav
+* Loads all project containers from API
+* Loads all projects from API
+* Loads all paths for project containers possible
+* User selects path container desired and clicks add
+* POST to containers/create with details
+* Server side - we create all projects that are within that container with times
+* When successful, we refresh the projects - maybe a page load?
+
+
+Code
+
+API Endpoints needed
+
+POST   containers/create
+DELETE containers
+GET    projects
+GET    containers
+GET    possible_containers
+
+Time
+
+Start
+End
+Duration
+Path
+Filename
+Directory
+DirectoryDepth
+Directories (array)
+Container
+
+Name
+Path
+
+Project
+
+Name
+Path
+
+
+POST   containers/create
+Pseudo Code
+
+after save
+
+container_path = "/Users/John/Documents"
+project_dirs = Time.
+                  where(directory starts_with /Users/John/Documents/).
+                  map { |t| t.directories[container_path.split("/").count] }.
+                  uniq
+
+project_dirs.each |dir|
+  Project.create(name: dir, path: container_path + "/" + dir)
+end
+
+
+
+
+DELETE containers
+GET    projects
+GET    containers
+GET    possible_containers
+
+
+
+
+
+
+
+
+
+
 Long Term Objective
 ----------
 
