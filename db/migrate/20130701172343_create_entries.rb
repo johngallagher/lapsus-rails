@@ -4,6 +4,7 @@ class CreateEntries < ActiveRecord::Migration
       t.datetime :started_at
       t.datetime :finished_at
       t.integer :project_id
+      t.string :url
 
       t.timestamps
     end

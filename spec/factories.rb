@@ -32,10 +32,6 @@ FactoryGirl.define do
     end
   end
 
-  factory :rule do
-    project { create(:project)}
-  end
-
   factory :project do
     name "Project"
 
