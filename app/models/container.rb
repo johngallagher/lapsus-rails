@@ -3,10 +3,8 @@ class Container < ActiveRecord::Base
 
   def self.possible_urls
     possible_urls = []
-    Entry.all.each do |entry|
-      urls_from_entry = []
-      Pathname.new(entry.url).descend { |path| urls_from_entry << path.to_s }
-      possible_urls << urls_from_entry[0..-3]
+    Entry.untrained.each do |entry|
+      possible_urls << entry.possible_container_urls
     end
     possible_urls.flatten.uniq
   end
