@@ -1,0 +1,8 @@
+<h1>New Container</h1>
+<%= form_for @container do |form| %>
+  <p><%= form.label :name %></p>
+  <p><%= form.text_field :name %></p>
+  <p><%= form.label :url %></p>
+  <p><%= form.text_field :url %></p>
+  <p><%= form.submit 'Save' %>
+<% end %>
