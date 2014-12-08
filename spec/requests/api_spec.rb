@@ -15,7 +15,7 @@ describe 'lapsus api', type: :request do
     end
 
     it 'with a project that matches the document creates an entry with project' do
-      FactoryGirl.create(:container, url: '/Users/John/Code')
+      FactoryGirl.create(:container, url: 'file:///Users/John/Code')
 
       post '/api/v1/entries', { entries: [rails_gemfile_document]}, format: :json
 
@@ -26,7 +26,7 @@ describe 'lapsus api', type: :request do
 
       expect(Entry.first.project).to be_present
       expect(Entry.first.project.name).to eq('rails')
-      expect(Entry.first.project.url).to eq('/Users/John/Code/rails')
+      expect(Entry.first.project.url).to eq('file:///Users/John/Code/rails')
     end
   end
 end
@@ -35,6 +35,6 @@ def rails_gemfile_document
   {     
     started_at: "2013-07-01 18:23:47",
     finished_at: "2013-07-01 18:23:47",
-    url: "/Users/John/Code/rails/Gemfile"
+    url: "file:///Users/John/Code/rails/Gemfile"
   }
 end

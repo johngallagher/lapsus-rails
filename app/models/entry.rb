@@ -1,6 +1,10 @@
 class Entry < ActiveRecord::Base
   include Pathable
   belongs_to :project
+
+  validates_presence_of :started_at, :finished_at, :url
+  validates_format_of :url, with: URI.regexp
+
   scope :untrained, -> { where(project: nil) }
 
   def possible_container_urls

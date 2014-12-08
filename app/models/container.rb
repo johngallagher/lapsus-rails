@@ -1,5 +1,7 @@
 class Container < ActiveRecord::Base
   include Pathable
+  validates_presence_of :url
+  validates_format_of :url, with: URI.regexp
 
   def self.possible_urls
     possible_urls = []
@@ -18,7 +20,8 @@ class Container < ActiveRecord::Base
   end
 
   def project_url_from_entry(entry)
-    File.join(['/'], entry.path_components.take(path_depth + 1))
+    project_path = entry.path_components.take(path_depth + 1).join('/')
+    URI::Generic.build(scheme: 'file', path: "///#{project_path}").to_s
   end
 
   private

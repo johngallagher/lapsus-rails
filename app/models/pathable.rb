@@ -4,6 +4,10 @@ module Pathable
   end
     
   def path_components
-    Pathname.new(url).each_filename.to_a
+    Pathname.new(path).each_filename.to_a
+  end
+
+  def path
+    URI(url).path
   end
 end
