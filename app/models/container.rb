@@ -1,16 +1,4 @@
 class Container < ActiveRecord::Base
-  def self.create_with_projects(attrs)
-    container = Container.create(attrs)
-    Entry.all.each do |entry|
-      if container.contains_project_for_entry?(entry)
-        entry.project = Project.find_or_create_from_container_and_entry(container, entry)
-      else
-        entry.project = nil
-      end
-      entry.save!
-    end
-  end
-
   def path_components
     Pathname.new(url).each_filename.to_a
   end
