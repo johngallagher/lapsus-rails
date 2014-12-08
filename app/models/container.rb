@@ -1,7 +1,5 @@
 class Container < ActiveRecord::Base
-  def path_components
-    Pathname.new(url).each_filename.to_a
-  end
+  include Pathable
 
   def contains_project_for_entry?(entry)
     contains_entry?(entry) && entry_nested_within_project_folder?(entry)
@@ -9,10 +7,6 @@ class Container < ActiveRecord::Base
 
   def project_name_from_entry(entry)
     entry.path_components[path_depth]
-  end
-
-  def path_depth
-    path_components.count
   end
 
   def project_url_from_entry(entry)
