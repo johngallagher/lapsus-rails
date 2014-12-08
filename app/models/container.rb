@@ -3,8 +3,12 @@ class Container < ActiveRecord::Base
 
   def self.possible_urls
     possible_urls = []
-    Pathname.new(Entry.first.url).descend { |path| possible_urls << path.to_s }
-    possible_urls[0..-3]
+    Entry.all.each do |entry|
+      urls_from_entry = []
+      Pathname.new(entry.url).descend { |path| urls_from_entry << path.to_s }
+      possible_urls << urls_from_entry[0..-3]
+    end
+    possible_urls.flatten.uniq
   end
 
   def contains_project_for_entry?(entry)

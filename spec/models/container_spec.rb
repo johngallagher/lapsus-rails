@@ -12,6 +12,19 @@ describe Container do
     ])
   end
 
+  it 'with no containers and two entries gives combined possible urls' do
+    assuming_an_entry_with_url('/Users/John/Code/rails/Gemfile')
+    assuming_an_entry_with_url('/Users/John/PersonalCode/Home/lapsus/main.rb')
+    urls = Container.possible_urls
+    expect(urls).to eq([
+      '/',
+      '/Users',
+      '/Users/John',
+      '/Users/John/Code',
+      '/Users/John/PersonalCode',
+      '/Users/John/PersonalCode/Home'
+    ])
+  end
 end
 
 def assuming_an_entry_with_url(url)
