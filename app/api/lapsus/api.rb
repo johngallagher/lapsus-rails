@@ -8,8 +8,9 @@ module Lapsus
     resource :entries do
       post do
         params['entries'].each do |entry_attrs|
-          Entry.create_with_project(entry_attrs)
+          Entry.create(entry_attrs)
         end
+        Trainer.train
       end
     end
   end
