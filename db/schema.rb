@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141130180107) do
+ActiveRecord::Schema.define(version: 20141209002142) do
 
   create_table "containers", force: true do |t|
     t.string "name"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20141130180107) do
     t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "duration"
   end
 
   create_table "projects", force: true do |t|

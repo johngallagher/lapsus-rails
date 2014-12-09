@@ -1,6 +1,7 @@
 class Entry < ActiveRecord::Base
   include Pathable
   belongs_to :project
+  before_save :calculate_duration
 
   validates_presence_of :started_at, :finished_at, :url
   validates_format_of :url, with: URI.regexp
@@ -11,5 +12,10 @@ class Entry < ActiveRecord::Base
     urls_from_entry = []
     Pathname.new(url).descend { |path| urls_from_entry << path.to_s }
     urls_from_entry[0..-3]
+  end
+
+  private
+  def calculate_duration
+    self.duration = self.finished_at - self.started_at
   end
 end
