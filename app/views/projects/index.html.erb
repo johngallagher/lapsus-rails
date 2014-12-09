@@ -1,0 +1,5 @@
+<h1>Projects</h1>
+<% @projects.each do |project| %>
+  <p>Name: <%= project.name.titleize %></p>
+  <p>Duration: <%= project.entries.map(&:duration).inject(&:+) %></p>
+<% end %>
