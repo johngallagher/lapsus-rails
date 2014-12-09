@@ -28,6 +28,13 @@ describe 'lapsus api', type: :request do
       expect(Entry.first.project.name).to eq('rails')
       expect(Entry.first.project.url).to eq('file:///Users/John/Code/rails')
     end
+
+    it 'with an invalid url it returns errors' do
+      post '/api/v1/entries', { entries: [{ started_at: "2013-01-01 18:00:00", finished_at: "2013-01-01 19:00:00", url: 'invalid' }]}, format: :json
+      expect(response.status).to eq(500)
+      expect(response.body).to eq('{"error":"Validation failed: Url is invalid"}')
+
+    end
   end
 end
 

@@ -4,12 +4,11 @@ module Lapsus
     version 'v1'
     format :json
     prefix :api
+    rescue_from :all
 
     resource :entries do
       post do
-        params['entries'].each do |entry_attrs|
-          Entry.create(entry_attrs)
-        end
+        Entry.create!(params['entries'])
         Trainer.train
       end
     end
