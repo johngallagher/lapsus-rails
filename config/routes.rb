@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  resources :containers, only: [:new, :create]
+  resources :containers, only: [:new, :create, :index]
   resources :entries, only: [:index]
+  resources :projects, only: [:index]
 
   mount Lapsus::API => '/'
   # The priority is based upon order of creation: first created -> highest priority.
