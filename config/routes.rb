@@ -1,12 +1,16 @@
 Rails.application.routes.draw do
+  #use_doorkeeper
   devise_for :users
   root 'entries#index'
+  namespace :api do
+    resources :entries
+  end
 
   resources :containers, only: [:new, :create, :index, :destroy, :delete]
   resources :entries, only: [:index]
   resources :projects, only: [:index]
 
-  mount Lapsus::API => '/'
+  #mount Lapsus::API => '/'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

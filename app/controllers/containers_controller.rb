@@ -1,4 +1,5 @@
 class ContainersController < ApplicationController
+  before_action :authenticate_user!
   def new
     @container = Container.new(params.permit(:container))
     render :new

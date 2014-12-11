@@ -13,6 +13,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'grape'
 gem "hashie_rails"
 gem 'devise'
+gem 'doorkeeper'
 
 group :production do
   gem 'rails_12factor'
