@@ -9,7 +9,7 @@ class ContainersController < ApplicationController
     if @container.save
       Trainer.train
       flash[:alert] = @container.errors
-      redirect_to projects_url
+      redirect_to containers_path
     else
       render :new
     end
