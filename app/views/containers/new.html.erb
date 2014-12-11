@@ -1,8 +1,14 @@
 <h1>New Container</h1>
 <%= form_for @container do |form| %>
-  <p><%= form.label :name %></p>
-  <p><%= form.text_field :name %></p>
-  <p><%= form.label :url %></p>
-  <p><%= form.text_field :url %></p>
-  <p><%= form.submit 'Save' %>
+  <div class="form-group">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+  <div class="form-group">
+    <%= form.label :url %>
+    <%= form.select(:url, Container.possible_urls.map { |url| [url[7..-1], url] }) %>
+  </div>
+  <div class="form-group">
+    <%= form.submit 'Save' %>
+  </div>
 <% end %>
