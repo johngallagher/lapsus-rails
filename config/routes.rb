@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root 'entries#index'
+
   resources :containers, only: [:new, :create, :index, :destroy, :delete]
   resources :entries, only: [:index]
   resources :projects, only: [:index]
