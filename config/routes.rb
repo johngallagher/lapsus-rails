@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   root 'entries#index'
 
   resources :containers, only: [:new, :create, :index, :destroy, :delete]
