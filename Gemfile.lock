@@ -85,7 +85,7 @@ GEM
     minitest (5.4.3)
     multi_json (1.10.1)
     multi_xml (0.5.5)
-    pg (0.17.1)
+    mysql2 (0.3.17)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -186,7 +186,7 @@ DEPENDENCIES
   hashie_rails
   jbuilder (~> 2.0)
   jquery-rails
-  pg
+  mysql2
   pry-rails
   rails (= 4.1.7)
   rails_12factor
