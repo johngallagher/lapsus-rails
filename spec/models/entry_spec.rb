@@ -16,6 +16,11 @@ describe Entry do
     expect(entry.duration).to eq(3600)
   end
 
+  it 'returns possible container urls' do
+    entry = create_entry(url: 'file:///Users/John/Code/lapsus/main.rb')
+    expect(entry.possible_container_urls).to eq(['file:///Users', 'file:///Users/John', 'file:///Users/John/Code'])
+  end
+
   it 'with no project it returns none' do
     expect(create_entry.project_name).to eq('None')
   end

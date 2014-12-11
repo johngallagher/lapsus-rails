@@ -11,7 +11,7 @@ class Entry < ActiveRecord::Base
   def possible_container_urls
     urls_from_entry = []
     Pathname.new(url).descend { |path| urls_from_entry << path.to_s }
-    urls_from_entry[0..-3]
+    urls_from_entry[1..-3]
   end
 
   def project_name
