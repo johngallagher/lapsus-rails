@@ -15,7 +15,6 @@ describe Container do
     assuming_an_entry_with_url('file:///Users/John/Code/rails/Gemfile')
     urls = Container.possible_urls
     expect(urls).to eq([
-      'file:',
       'file:///Users',
       'file:///Users/John',
       'file:///Users/John/Code'
@@ -27,7 +26,6 @@ describe Container do
     assuming_an_entry_with_url('file:///Users/John/PersonalCode/Home/lapsus/main.rb')
     urls = Container.possible_urls
     expect(urls).to eq([
-      'file:',
       'file:///Users',
       'file:///Users/John',
       'file:///Users/John/Code',
@@ -42,7 +40,6 @@ describe Container do
     assuming_an_entry_with_url_and_project('file:///Users/John/PersonalCode/Main/generator/package.json', 'file:///Users/John/PersonalCode/Main')
     urls = Container.possible_urls
     expect(urls).to eq([
-      'file:',
       'file:///Users',
       'file:///Users/John',
       'file:///Users/John/Code',
