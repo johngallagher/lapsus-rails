@@ -10,8 +10,8 @@ FactoryGirl.define do
   end
 
   factory :entry do
-    started_at "2013-07-01 18:23:47"
-    finished_at "2013-07-01 18:23:47"
+    sequence(:started_at, 10) { |seconds|  "2013-07-01 18:23:#{seconds}" }
+    sequence(:finished_at, 11) { |seconds|  "2013-07-01 18:23:#{seconds}" }
     url "file:///Users/John/Code/rails/Gemfile"
   end
 end
