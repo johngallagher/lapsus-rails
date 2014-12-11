@@ -1,4 +1,3 @@
-require 'pry'
 module Lapsus
   class API < Grape::API
     version 'v1'

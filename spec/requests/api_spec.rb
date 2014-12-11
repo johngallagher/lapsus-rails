@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'pry'
 
 describe 'lapsus api', type: :request do
   describe 'POST /api/v1/entries' do
