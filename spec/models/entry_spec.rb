@@ -15,4 +15,16 @@ describe Entry do
     entry = Entry.create(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', url: 'file:///Users/John')
     expect(entry.duration).to eq(3600)
   end
+
+  it 'with no project it returns none' do
+    entry = Entry.create(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', url: 'file:///Users/John')
+    expect(entry.project_name).to eq('None')
+  end
+
+  it 'with a project it returns the project name' do
+    entry = Entry.create(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', url: 'file:///Users/John')
+    project = Project.create(name: 'John', url: '')
+    entry.project = project
+    expect(entry.project_name).to eq('John')
+  end
 end

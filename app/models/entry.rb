@@ -14,6 +14,12 @@ class Entry < ActiveRecord::Base
     urls_from_entry[0..-3]
   end
 
+  def project_name
+    return 'None' if project.nil?
+
+    project.name
+  end
+
   private
   def calculate_duration
     self.duration = self.finished_at - self.started_at
