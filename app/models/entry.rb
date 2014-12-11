@@ -5,13 +5,15 @@ class Entry < ActiveRecord::Base
 
   validates_presence_of :started_at, :finished_at, :url
   validates_format_of :url, with: URI.regexp
-  #validate :cannot_overlap_another_entry
+  validate :cannot_overlap_another_entry
 
   scope :untrained, -> { where(project: nil) }
 
-  #def cannot_overlap_another_entry
-
-  #end
+  def cannot_overlap_another_entry
+    if overlapping_entries.any?
+      errors.add("entry #{self}", "must not overlap entries #{overlapping_entries}")
+    end
+  end
 
   def overlapping_entries
     overlapping_start                = Entry.where('started_at < ? AND finished_at > ?', self.finished_at, self.finished_at)

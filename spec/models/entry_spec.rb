@@ -11,11 +11,12 @@ describe Entry do
   it { should allow_value('file://User/John', 'http://www.google.com').for(:url) }
   it { should_not allow_value('User', 'hello').for(:url) }
 
-  xit 'doesnt allow overlapping times' do
+  it 'marks overlapping entries as invalid' do
     entry = create_entry(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00')
     duplicate_entry = create_entry(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00')
     expect(entry).to be_valid
     expect(duplicate_entry).to be_invalid
+    expect(duplicate_entry.errors.full_messages.first).to include('overlap')
   end
 
   # 14:00       15:00       16:00
