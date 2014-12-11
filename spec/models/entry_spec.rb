@@ -12,19 +12,27 @@ describe Entry do
   it { should_not allow_value('User', 'hello').for(:url) }
 
   it 'calculates duration' do
-    entry = Entry.create(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', url: 'file:///Users/John')
+    entry = create_entry(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00')
     expect(entry.duration).to eq(3600)
   end
 
   it 'with no project it returns none' do
-    entry = Entry.create(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', url: 'file:///Users/John')
-    expect(entry.project_name).to eq('None')
+    expect(create_entry.project_name).to eq('None')
   end
 
   it 'with a project it returns the project name' do
-    entry = Entry.create(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', url: 'file:///Users/John')
-    project = Project.create(name: 'John', url: '')
-    entry.project = project
+    project = create_project(name: 'John')
+    entry = create_entry(project_id: project.id)
     expect(entry.project_name).to eq('John')
   end
+end
+
+def create_project(attrs={})
+  defaults = { name: 'John', url: 'file:///Users/John' }
+  Project.create(defaults.merge(attrs))
+end
+
+def create_entry(attrs={})
+  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', url: 'file:///Users/John'}
+  Entry.create(defaults.merge(attrs))
 end
