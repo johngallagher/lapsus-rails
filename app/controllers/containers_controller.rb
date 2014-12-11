@@ -8,9 +8,9 @@ class ContainersController < ApplicationController
     @container = Container.new(container_params)
     if @container.save
       Trainer.train
-      flash[:alert] = @container.errors
       redirect_to containers_path
     else
+      flash.now[:alert] = @container.errors.full_messages.join(', ')
       render :new
     end
   end
