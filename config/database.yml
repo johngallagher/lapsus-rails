@@ -1,19 +1,17 @@
 development:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
+  adapter: postgresql
+  encoding: unicode
   database: lapsus_development
   pool: 5
-  username: root
+  username: johngallagher
   password:
   host: localhost
 
 test:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
+  adapter: postgresql
+  encoding: unicode
   database: lapsus_test
   pool: 5
-  username: root
+  username: johngallagher
   password:
   host: localhost
