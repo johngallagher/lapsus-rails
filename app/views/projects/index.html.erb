@@ -1,5 +1,13 @@
 <h1>Projects</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Time</th>
+  </tr>
 <% @projects.each do |project| %>
-  <p>Name: <%= project.name.titleize %></p>
-  <p>Duration: <%= project.entries.map(&:duration).inject(&:+) %></p>
+  <tr>
+    <td><%= project.name.titleize %></td>
+    <td><%= project.entries.map(&:duration).inject(&:+) %></td>
+  </tr>
 <% end %>
+</table>

@@ -1,6 +1,15 @@
 <h1>Containers</h1>
 
-<% @containers.each do |container| %>
-  <p>Name: <p><%= container.name %></p>
-  <p>Path: <p><%= container.path %></p>
+<%= link_to 'New Container', new_container_path %>
+<table>
+  <tr>
+    <th>Path</th>
+    <th>Actions</th>
+  </tr>
+<% @containers.each do |container| %> 
+  <tr>
+    <td><%= container.path %></td>
+    <td><%= link_to 'Delete', container_path(container), method: :delete %></td>
+  </tr>
 <% end %>
+</table>

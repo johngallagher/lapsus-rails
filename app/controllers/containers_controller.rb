@@ -19,6 +19,12 @@ class ContainersController < ApplicationController
     @containers = Container.all
   end
 
+  def destroy
+    @container = Container.find(params.permit(:id)[:id])
+    @container.destroy
+    Trainer.train
+    redirect_to containers_path
+  end
   private
   def container_params
     params.require(:container).permit(:name, :url)

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :containers, only: [:new, :create, :index]
+  resources :containers, only: [:new, :create, :index, :destroy, :delete]
   resources :entries, only: [:index]
   resources :projects, only: [:index]
 
