@@ -12,7 +12,10 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'grape'
 gem "hashie_rails"
-gem 'rails_12factor'
+
+group :production do
+  gem 'rails_12factor'
+end
 
 group :development do
   gem 'pry-rails'
