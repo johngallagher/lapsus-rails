@@ -1,7 +1,7 @@
 class ContainersController < ApplicationController
   before_action :authenticate_user!
   def new
-    @container = Container.new(params.permit(:container))
+    @container = Container.new
     render :new
   end
 
@@ -21,11 +21,12 @@ class ContainersController < ApplicationController
   end
 
   def destroy
-    @container = Container.find(params.permit(:id)[:id])
-    @container.destroy
+    container = Container.find(params.permit(:id)[:id])
+    container.destroy
     Trainer.train
     redirect_to containers_path
   end
+
   private
   def container_params
     params.require(:container).permit(:name, :path)
