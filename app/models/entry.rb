@@ -25,9 +25,7 @@ class Entry < ActiveRecord::Base
   end
 
   def possible_container_paths
-    paths_from_entry = []
-    Pathname.new(self.path).descend { |path_at_current_level| paths_from_entry << path_at_current_level.to_s }
-    paths_from_entry[1..-3]
+    path_heirarchy[0..-3]
   end
 
   def project_name
