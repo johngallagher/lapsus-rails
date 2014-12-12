@@ -3,11 +3,9 @@ class Container < ActiveRecord::Base
   validates_presence_of :path
 
   def self.possible_paths
-    possible_paths = []
-    Entry.untrained.each do |entry|
-      possible_paths << entry.possible_container_paths
-    end
-    possible_paths.flatten.uniq
+    from_entries = Entry.all.map { |entry| entry.possible_container_paths }.flatten.uniq
+    from_containers = Container.all.map { |container| container.path_heirarchy }.flatten.uniq
+    from_entries - from_containers
   end
 
   def contains_project_for_entry?(entry)
