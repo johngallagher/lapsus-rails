@@ -24,10 +24,6 @@ class Entry < ActiveRecord::Base
       .uniq
   end
 
-  def possible_container_paths
-    path_heirarchy[0..-3]
-  end
-
   def project_name
     return 'None' if project.nil?
 

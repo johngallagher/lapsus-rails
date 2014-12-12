@@ -98,7 +98,7 @@ describe Entry do
   #   |   entry   |
   #               | new_entry |
   it 'when new entry is after entry it doesnt show any overlapping entries' do
-    entry = create_entry(started_at: '2014-01-01 14:00:00', finished_at:  '2014-01-01 15:00:00')
+    create_entry(started_at: '2014-01-01 14:00:00', finished_at:  '2014-01-01 15:00:00')
     new_entry = new_entry(started_at: '2014-01-01 15:00:00', finished_at:  '2014-01-01 16:00:00')
     expect(new_entry.overlapping_entries).to eq([])
   end
@@ -107,7 +107,7 @@ describe Entry do
   #   | new_entry |
   #               |    entry  |
   it 'when new entry is before entry it doesnt show any overlapping entries' do
-    entry = create_entry(started_at: '2014-01-01 15:00:00', finished_at:  '2014-01-01 16:00:00')
+    create_entry(started_at: '2014-01-01 15:00:00', finished_at:  '2014-01-01 16:00:00')
     new_entry = new_entry(started_at: '2014-01-01 14:00:00', finished_at:  '2014-01-01 15:00:00')
     expect(new_entry.overlapping_entries).to eq([])
   end
@@ -117,10 +117,6 @@ describe Entry do
     expect(entry.duration).to eq(3600)
   end
 
-  it 'returns possible container paths' do
-    entry = create_entry(path: '/Users/John/Code/lapsus/main.rb')
-    expect(entry.possible_container_paths).to eq(['/Users', '/Users/John', '/Users/John/Code'])
-  end
 
   it 'with no project it returns none' do
     expect(create_entry.project_name).to eq('None')
@@ -142,7 +138,12 @@ def new_entry(attrs={})
   defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', path: '/Users/John'}
   Entry.new(defaults.merge(attrs))
 end
+
 def create_entry(attrs={})
   defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', path: '/Users/John'}
   Entry.create(defaults.merge(attrs))
+end
+
+def assuming_a_container(path)
+  Container.create(name: 'Code', path: path)
 end

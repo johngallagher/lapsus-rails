@@ -2,11 +2,13 @@
 <table>
   <tr>
     <th>Name</th>
+    <th>Path</th>
     <th>Time</th>
   </tr>
 <% @projects.each do |project| %>
   <tr>
-    <td><%= project.name.titleize %></td>
+    <td><%= project.name %></td>
+    <td><%= project.path %></td>
     <td><%= project.entries.map(&:duration).inject(&:+) %></td>
   </tr>
 <% end %>
