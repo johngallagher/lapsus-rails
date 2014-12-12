@@ -6,4 +6,4 @@ deployment:
 
 database:
   override:
-    - bundle exec rake db:create db:schema:load --trace db:seed
+    - bundle exec rake db:create db:migrate db:seed
