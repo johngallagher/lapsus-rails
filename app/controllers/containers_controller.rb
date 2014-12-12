@@ -28,6 +28,6 @@ class ContainersController < ApplicationController
   end
   private
   def container_params
-    params.require(:container).permit(:name, :url)
+    params.require(:container).permit(:name, :path)
   end
 end

@@ -1,7 +1,7 @@
 <h1>Entries</h1>
 <table>
   <tr>
-    <th>URL</th>
+    <th>Path</th>
     <th>Duration</th>
     <th>Project</th>
   </tr>
@@ -9,7 +9,7 @@
   <% @entries.each do |entry| %>
 
     <tr>
-      <td><%= entry.url %></td>
+      <td><%= entry.path %></td>
       <td><%= entry.duration %></td>
       <td><%= entry.project_name %></td>
     </tr>

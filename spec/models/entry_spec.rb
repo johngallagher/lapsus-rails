@@ -3,13 +3,11 @@ require 'spec_helper'
 describe Entry do
   it { should respond_to :started_at }
   it { should respond_to :finished_at }
-  it { should respond_to :url }
+  it { should respond_to :path }
   it { should belong_to :project }
   it { should validate_presence_of :started_at}
   it { should validate_presence_of :finished_at }
-  it { should validate_presence_of :url }
-  it { should allow_value('file://User/John', 'http://www.google.com').for(:url) }
-  it { should_not allow_value('User', 'hello').for(:url) }
+  it { should validate_presence_of :path }
 
   it 'marks overlapping entries as invalid' do
     entry = create_entry(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00')
@@ -119,9 +117,9 @@ describe Entry do
     expect(entry.duration).to eq(3600)
   end
 
-  it 'returns possible container urls' do
-    entry = create_entry(url: 'file:///Users/John/Code/lapsus/main.rb')
-    expect(entry.possible_container_urls).to eq(['file:///Users', 'file:///Users/John', 'file:///Users/John/Code'])
+  it 'returns possible container paths' do
+    entry = create_entry(path: '/Users/John/Code/lapsus/main.rb')
+    expect(entry.possible_container_paths).to eq(['/Users', '/Users/John', '/Users/John/Code'])
   end
 
   it 'with no project it returns none' do
@@ -136,15 +134,15 @@ describe Entry do
 end
 
 def create_project(attrs={})
-  defaults = { name: 'John', url: 'file:///Users/John' }
+  defaults = { name: 'John', path: '/Users/John' }
   Project.create(defaults.merge(attrs))
 end
 
 def new_entry(attrs={})
-  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', url: 'file:///Users/John'}
+  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', path: '/Users/John'}
   Entry.new(defaults.merge(attrs))
 end
 def create_entry(attrs={})
-  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', url: 'file:///Users/John'}
+  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', path: '/Users/John'}
   Entry.create(defaults.merge(attrs))
 end

@@ -3,8 +3,7 @@ class Entry < ActiveRecord::Base
   belongs_to :project
   before_save :calculate_duration
 
-  validates_presence_of :started_at, :finished_at, :url
-  validates_format_of :url, with: URI.regexp
+  validates_presence_of :started_at, :finished_at, :path
   validate :cannot_overlap_another_entry
 
   scope :untrained, -> { where(project: nil) }
@@ -25,10 +24,10 @@ class Entry < ActiveRecord::Base
       .uniq
   end
 
-  def possible_container_urls
-    urls_from_entry = []
-    Pathname.new(url).descend { |path| urls_from_entry << path.to_s }
-    urls_from_entry[1..-3]
+  def possible_container_paths
+    paths_from_entry = []
+    Pathname.new(self.path).descend { |path_at_current_level| paths_from_entry << path_at_current_level.to_s }
+    paths_from_entry[1..-3]
   end
 
   def project_name

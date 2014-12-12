@@ -11,21 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211083624) do
+ActiveRecord::Schema.define(version: 20141212184149) do
 
   create_table "containers", force: true do |t|
     t.string "name"
-    t.string "url"
+    t.string "path"
   end
 
   create_table "entries", force: true do |t|
     t.datetime "started_at"
     t.datetime "finished_at"
     t.integer  "project_id"
-    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "duration"
+    t.string   "path"
   end
 
   create_table "oauth_access_grants", force: true do |t|
@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(version: 20141211083624) do
 
   create_table "projects", force: true do |t|
     t.string   "name"
-    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "path"
   end
 
   create_table "users", force: true do |t|

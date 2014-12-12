@@ -1,63 +1,61 @@
 require 'spec_helper'
 
 describe Container do
-  it { should validate_presence_of :url }
-  it { should allow_value('file:///User/John', 'http://www.google.com').for(:url) }
-  it { should_not allow_value('User', 'hello').for(:url) }
+  it { should validate_presence_of :path }
 
-  it 'with an entry two levels below the container it creates the project url' do
-    entry = assuming_an_entry_with_url('file:///Users/John/Code/rails/Gemfile')
-    container = assuming_a_container('file:///Users/John/Code')
-    expect(container.project_url_from_entry(entry)).to eq('file:///Users/John/Code/rails')
+  it 'with an entry two levels below the container it creates the project path' do
+    entry = assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
+    container = assuming_a_container('/Users/John/Code')
+    expect(container.project_path_from_entry(entry)).to eq('/Users/John/Code/rails')
   end
 
-  it 'with no containers and one entry gives all possible container urls' do
-    assuming_an_entry_with_url('file:///Users/John/Code/rails/Gemfile')
-    urls = Container.possible_urls
-    expect(urls).to eq([
-      'file:///Users',
-      'file:///Users/John',
-      'file:///Users/John/Code'
+  it 'with no containers and one entry gives all possible container paths' do
+    assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
+    paths = Container.possible_paths
+    expect(paths).to eq([
+      '/Users',
+      '/Users/John',
+      '/Users/John/Code'
     ])
   end
 
-  it 'with no containers and two entries gives combined possible urls' do
-    assuming_an_entry_with_url('file:///Users/John/Code/rails/Gemfile')
-    assuming_an_entry_with_url('file:///Users/John/PersonalCode/Home/lapsus/main.rb')
-    urls = Container.possible_urls
-    expect(urls).to eq([
-      'file:///Users',
-      'file:///Users/John',
-      'file:///Users/John/Code',
-      'file:///Users/John/PersonalCode',
-      'file:///Users/John/PersonalCode/Home'
+  it 'with no containers and two entries gives combined possible paths' do
+    assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
+    assuming_an_entry_with_path('/Users/John/PersonalCode/Home/lapsus/main.rb')
+    paths = Container.possible_paths
+    expect(paths).to eq([
+      '/Users',
+      '/Users/John',
+      '/Users/John/Code',
+      '/Users/John/PersonalCode',
+      '/Users/John/PersonalCode/Home'
     ])
   end
 
   it 'with a container already in place it excludes all possible subdirectories' do
-    assuming_an_entry_with_url('file:///Users/John/Code/rails/Gemfile')
-    assuming_an_entry_with_url('file:///Users/John/PersonalCode/Home/lapsus/main.rb')
-    assuming_an_entry_with_url_and_project('file:///Users/John/PersonalCode/Main/generator/package.json', 'file:///Users/John/PersonalCode/Main')
-    urls = Container.possible_urls
-    expect(urls).to eq([
-      'file:///Users',
-      'file:///Users/John',
-      'file:///Users/John/Code',
-      'file:///Users/John/PersonalCode',
-      'file:///Users/John/PersonalCode/Home'
+    assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
+    assuming_an_entry_with_path('/Users/John/PersonalCode/Home/lapsus/main.rb')
+    assuming_an_entry_with_path_and_project('/Users/John/PersonalCode/Main/generator/package.json', '/Users/John/PersonalCode/Main')
+    paths = Container.possible_paths
+    expect(paths).to eq([
+      '/Users',
+      '/Users/John',
+      '/Users/John/Code',
+      '/Users/John/PersonalCode',
+      '/Users/John/PersonalCode/Home'
     ])
   end
 end
 
-def assuming_an_entry_with_url_and_project(url, project_url)
-  project = Project.create(url: project_url)
-  FactoryGirl.create(:entry, url: url, project: project)
+def assuming_an_entry_with_path_and_project(path, project_path)
+  project = Project.create(path: project_path)
+  FactoryGirl.create(:entry, path: path, project: project)
 end
 
-def assuming_an_entry_with_url(url)
-  FactoryGirl.create(:entry, url: url)
+def assuming_an_entry_with_path(path)
+  FactoryGirl.create(:entry, path: path)
 end
 
-def assuming_a_container(url)
-  Container.create(name: 'Code', url: url)
+def assuming_a_container(path)
+  Container.create(name: 'Code', path: path)
 end

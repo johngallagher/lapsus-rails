@@ -1,14 +1,13 @@
 class Container < ActiveRecord::Base
   include Pathable
-  validates_presence_of :url
-  validates_format_of :url, with: URI.regexp
+  validates_presence_of :path
 
-  def self.possible_urls
-    possible_urls = []
+  def self.possible_paths
+    possible_paths = []
     Entry.untrained.each do |entry|
-      possible_urls << entry.possible_container_urls
+      possible_paths << entry.possible_container_paths
     end
-    possible_urls.flatten.uniq
+    possible_paths.flatten.uniq
   end
 
   def contains_project_for_entry?(entry)
@@ -19,9 +18,8 @@ class Container < ActiveRecord::Base
     entry.path_components[path_depth]
   end
 
-  def project_url_from_entry(entry)
-    project_path = entry.path_components.take(path_depth + 1).join('/')
-    URI::Generic.build(scheme: 'file', path: "///#{project_path}").to_s
+  def project_path_from_entry(entry)
+    '/' + entry.path_components.take(path_depth + 1).join('/')
   end
 
   private
