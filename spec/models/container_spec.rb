@@ -9,47 +9,41 @@ describe Container do
     expect(container.project_path_from_entry(entry)).to eq('/Users/John/Code/rails')
   end
 
-  it 'with no containers and one entry gives all possible container paths' do
-    assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
-    paths = Container.possible_paths
-    expect(paths).to eq([
-      '/Users',
-      '/Users/John',
-      '/Users/John/Code'
-    ])
-  end
+  describe 'possible paths' do
+    it 'with no containers and one entry gives all possible container paths' do
+      assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
+      paths = Container.possible_paths
+      expect(paths).to eq([
+        '/Users',
+        '/Users/John',
+        '/Users/John/Code'
+      ])
+    end
 
-  it 'with no containers and two entries gives combined possible paths' do
-    assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
-    assuming_an_entry_with_path('/Users/John/PersonalCode/Home/lapsus/main.rb')
-    paths = Container.possible_paths
-    expect(paths).to eq([
-      '/Users',
-      '/Users/John',
-      '/Users/John/Code',
-      '/Users/John/PersonalCode',
-      '/Users/John/PersonalCode/Home'
-    ])
-  end
+    it 'with no containers and two entries gives combined possible paths' do
+      assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
+      assuming_an_entry_with_path('/Users/John/PersonalCode/Home/lapsus/main.rb')
+      paths = Container.possible_paths
+      expect(paths).to eq([
+        '/Users',
+        '/Users/John',
+        '/Users/John/Code',
+        '/Users/John/PersonalCode',
+        '/Users/John/PersonalCode/Home'
+      ])
+    end
 
-  it 'with a container already in place it excludes all possible subdirectories' do
-    assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
-    assuming_an_entry_with_path('/Users/John/PersonalCode/Home/lapsus/main.rb')
-    assuming_an_entry_with_path_and_project('/Users/John/PersonalCode/Main/generator/package.json', '/Users/John/PersonalCode/Main')
-    paths = Container.possible_paths
-    expect(paths).to eq([
-      '/Users',
-      '/Users/John',
-      '/Users/John/Code',
-      '/Users/John/PersonalCode',
-      '/Users/John/PersonalCode/Home'
-    ])
-  end
-end
+    it 'with a container it excludes all conflicting upper directories' do
+      assuming_a_container('/Users/John/Code')
+      assuming_an_entry_with_path('/Users/John/Code/rails/Gemfile')
+      assuming_an_entry_with_path('/Users/John/PersonalCode/Home/lapsus/main.rb')
 
-def assuming_an_entry_with_path_and_project(path, project_path)
-  project = Project.create(path: project_path)
-  FactoryGirl.create(:entry, path: path, project: project)
+      expect(Container.possible_paths).to eq([
+        '/Users/John/PersonalCode',
+        '/Users/John/PersonalCode/Home'
+      ])
+    end
+  end
 end
 
 def assuming_an_entry_with_path(path)
