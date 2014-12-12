@@ -3,3 +3,7 @@ deployment:
     branch: master
     heroku:
       appname: lapsus
+
+database:
+  override:
+    - bundle exec rake db:create db:schema:load --trace db:seed
