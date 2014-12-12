@@ -10,6 +10,6 @@ module Pathable
   def path_heirarchy
     paths = []
     Pathname.new(path).descend { |p| paths << p.to_s }
-    paths.reject { |p| p == '' || p == '/' }
+    paths.reject(&:empty?).reject { |p| p == '/' }
   end
 end
