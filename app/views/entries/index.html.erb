@@ -1,6 +1,8 @@
 <h1>Entries</h1>
 <table>
   <tr>
+
+    <th>Started At</th>
     <th>Path</th>
     <th>Duration</th>
     <th>Project</th>
@@ -9,8 +11,9 @@
   <% @entries.each do |entry| %>
 
     <tr>
+      <td><%= entry.started_at.strftime('%d/%m/%y %H:%M') %></td>
       <td><%= entry.path %></td>
-      <td><%= entry.duration %></td>
+      <td><%= distance_of_time_in_words(entry.duration) %></td>
       <td><%= entry.project_name %></td>
     </tr>
   <% end %>
