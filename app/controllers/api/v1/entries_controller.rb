@@ -1,4 +1,5 @@
 class Api::V1::EntriesController < ApplicationController
+  doorkeeper_for :all
   respond_to :json
 
   def create

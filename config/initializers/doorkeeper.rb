@@ -3,14 +3,23 @@ Doorkeeper.configure do
   # Currently supported options are :active_record, :mongoid2, :mongoid3, :mongo_mapper
   orm :active_record
 
-  # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    if user_signed_in?
-      current_user
-    else
-      redirect_to new_user_session_path
-    end
+    User.find_by_id(session[:current_user_id]) || redirect_to(login_url)
   end
+
+  resource_owner_from_credentials do |routes|
+    u = User.find_for_database_authentication(:email => params[:username])
+    u if u && u.valid_password?(params[:password])
+  end
+  
+  # This block will be called to check whether the resource owner is authenticated or not.
+  #resource_owner_authenticator do
+    #if user_signed_in?
+      #current_user
+    #else
+      #redirect_to new_user_session_path
+    #end
+  #end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
   # admin_authenticator do
