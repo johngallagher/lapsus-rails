@@ -4,15 +4,8 @@ class Entry < ActiveRecord::Base
   before_save :calculate_duration
 
   validates_presence_of :started_at, :finished_at, :path
-  #validate :cannot_overlap_another_entry
 
-  scope :untrained, -> { where(project: nil) }
-
-  def cannot_overlap_another_entry
-    if overlapping_entries.any?
-      errors.add("entry #{self}", "must not overlap entries #{overlapping_entries}")
-    end
-  end
+  scope :for_user, lambda { |user| where(user_id: user.id) }
 
   def overlapping_entries
     overlapping_start                = Entry.where('started_at < ? AND finished_at > ?', self.finished_at, self.finished_at)

@@ -2,9 +2,11 @@ class Container < ActiveRecord::Base
   include Pathable
   validates_presence_of :path
 
-  def self.possible_paths
-    containers = Container.all
-    from_entries = Entry.all.map { |entry| possible_paths_for(entry, containers) }.flatten.uniq
+  scope :for_user, lambda { |user| where(user_id: user.id) }
+
+  def self.possible_paths(user)
+    containers = Container.for_user(user)
+    from_entries = Entry.for_user(user).map { |entry| possible_paths_for(entry, containers) }.flatten.uniq
     from_containers = containers.map { |container| container.path_heirarchy }.flatten.uniq
     from_entries - from_containers
   end

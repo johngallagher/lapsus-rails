@@ -1,14 +1,21 @@
 class Trainer
-  def self.train
+  def self.train_for(user)
     Project.delete_all
-    Entry.all.each { |entry| entry.project = nil; entry.save! }
-    Container.all.each do |container|
-      Entry.all.each do |entry|
+
+    entries = Entry.for_user(user)
+    untrain_entries(entries)
+
+    Container.for_user(user).each do |container|
+      entries.each do |entry|
         if container.contains_project_for_entry?(entry)
           entry.project = Project.find_or_create_from_container_and_entry(container, entry)
+          entry.save!
         end
-        entry.save!
       end
     end
+  end
+
+  def self.untrain_entries(entries)
+    entries.each { |entry| entry.project = nil; entry.save! }
   end
 end

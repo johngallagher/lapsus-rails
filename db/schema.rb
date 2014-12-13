@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141212184149) do
+ActiveRecord::Schema.define(version: 20141213131954) do
 
   create_table "containers", force: true do |t|
-    t.string "name"
-    t.string "path"
+    t.string  "name"
+    t.string  "path"
+    t.integer "user_id"
   end
 
   create_table "entries", force: true do |t|
@@ -26,6 +27,7 @@ ActiveRecord::Schema.define(version: 20141212184149) do
     t.datetime "updated_at"
     t.integer  "duration"
     t.string   "path"
+    t.integer  "user_id"
   end
 
   create_table "oauth_access_grants", force: true do |t|
@@ -72,6 +74,7 @@ ActiveRecord::Schema.define(version: 20141212184149) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "path"
+    t.integer  "user_id"
   end
 
   create_table "users", force: true do |t|
