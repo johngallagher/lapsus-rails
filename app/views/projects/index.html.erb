@@ -9,7 +9,7 @@
   <tr>
     <td><%= project.name %></td>
     <td><%= project.path %></td>
-    <td><%= project.entries.map(&:duration).inject(&:+) %></td>
+    <td><%= distance_of_time_in_words(project.entries.map(&:duration).inject(&:+)) %></td>
   </tr>
 <% end %>
 </table>
