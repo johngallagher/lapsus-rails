@@ -46,18 +46,18 @@ describe Container do
     it 'when theres a container and another entry the possible paths exclude subdirectories of the container' do
       assuming_a_container('/Users/John')
       entry = assuming_an_entry_with_path('/Users/Mike/Documents/CourtCase/hearing.doc')
-      expect(Container.possible_paths_for(entry)).to eq(['/Users', '/Users/Mike', '/Users/Mike/Documents'])
+      expect(Container.possible_paths_for(entry, Container.all)).to eq(['/Users', '/Users/Mike', '/Users/Mike/Documents'])
     end
 
     it 'when theres a container the possible paths exclude subdirectories of the container' do
       assuming_a_container('/Users')
       entry = assuming_an_entry_with_path('/Users/John/Code/lapsus/main.rb')
-      expect(Container.possible_paths_for(entry)).to eq([])
+      expect(Container.possible_paths_for(entry, Container.all)).to eq([])
     end
 
     it 'returns possible container paths' do
       entry = assuming_an_entry_with_path('/Users/John/Code/lapsus/main.rb')
-      expect(Container.possible_paths_for(entry)).to eq(['/Users', '/Users/John', '/Users/John/Code'])
+      expect(Container.possible_paths_for(entry, Container.all)).to eq(['/Users', '/Users/John', '/Users/John/Code'])
     end
   end
 end
