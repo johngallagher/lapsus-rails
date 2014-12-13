@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'lapsus api', type: :request do
   describe 'POST /api/v1/entries' do
-    it 'with no containers it creates an entry with no project' do
+    xit 'with no containers it creates an entry with no project' do
       post '/api/v1/entries', { entries: [rails_gemfile_document]}, format: :json
 
       expect(Entry.count).to eq(1)
@@ -13,7 +13,7 @@ describe 'lapsus api', type: :request do
       expect(Entry.first.project).to be_nil
     end
 
-    it 'with a project that matches the document creates an entry with project' do
+    xit 'with a project that matches the document creates an entry with project' do
       FactoryGirl.create(:container, path: '/Users/John/Code')
 
       post '/api/v1/entries', { entries: [rails_gemfile_document]}, format: :json
@@ -28,7 +28,7 @@ describe 'lapsus api', type: :request do
       expect(Entry.first.project.path).to eq('/Users/John/Code/rails')
     end
 
-    it 'with an invalid path it returns errors' do
+    xit 'with an invalid path it returns errors' do
       post '/api/v1/entries', { entries: [{ started_at: "2013-01-01 18:00:00", finished_at: "2013-01-01 19:00:00" }]}, format: :json
       expect(response.status).to eq(422)
       expect(JSON(response.body).first['errors']).to eq(["Path can't be blank"])
