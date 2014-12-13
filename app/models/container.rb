@@ -3,14 +3,15 @@ class Container < ActiveRecord::Base
   validates_presence_of :path
 
   def self.possible_paths
-    from_entries = Entry.all.map { |entry| possible_paths_for(entry) }.flatten.uniq
-    from_containers = Container.all.map { |container| container.path_heirarchy }.flatten.uniq
+    containers = Container.all
+    from_entries = Entry.all.map { |entry| possible_paths_for(entry, containers) }.flatten.uniq
+    from_containers = containers.map { |container| container.path_heirarchy }.flatten.uniq
     from_entries - from_containers
   end
 
-  def self.possible_paths_for(entry)
+  def self.possible_paths_for(entry, containers)
     possible_paths = entry.path_heirarchy[0..-3]
-    Container.all.map(&:path).each do |path|
+    containers.map(&:path).each do |path|
       index_of_container_path = possible_paths.index(path)
       possible_paths.slice!(index_of_container_path..-1) if index_of_container_path
     end

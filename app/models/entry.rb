@@ -4,7 +4,7 @@ class Entry < ActiveRecord::Base
   before_save :calculate_duration
 
   validates_presence_of :started_at, :finished_at, :path
-  validate :cannot_overlap_another_entry
+  #validate :cannot_overlap_another_entry
 
   scope :untrained, -> { where(project: nil) }
 

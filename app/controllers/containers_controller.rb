@@ -1,6 +1,7 @@
 class ContainersController < ApplicationController
   before_action :authenticate_user!
   def new
+    @container_paths = Container.possible_paths
     @container = Container.new
     render :new
   end
