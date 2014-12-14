@@ -12,5 +12,6 @@
  *
  *= require_tree .
  *= require bootstrap/dist/css/bootstrap
+ *= require bootstrap-daterangepicker/daterangepicker-bs3
  *= require_self
  */
