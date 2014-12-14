@@ -19,7 +19,11 @@ class Api::V1::EntriesController < ApplicationController
   end
 
   def trained(entries)
-    entries.each { |entry| Trainer.train_entry(entry) }
+    entries.each do |entry|
+      Trainer.train_entry(entry)
+      entry.save!
+      entry
+    end
   end
 
   def current_resource_owner

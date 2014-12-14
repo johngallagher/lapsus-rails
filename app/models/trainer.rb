@@ -4,7 +4,6 @@ class Trainer
     users_containers.each do |container|
       if container.contains_project_for_entry?(entry)
         entry.project = Project.find_or_create_from_container_and_entry(container, entry)
-        entry.save!
       end
     end
     entry
