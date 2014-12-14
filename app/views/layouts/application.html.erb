@@ -10,7 +10,6 @@
 <body>
 
 <div class="container">
-<%= render 'shared/flash_messages' if flash.present? %>
 
 <nav class="navbar navbar-default" role="navigation">
   <% if user_signed_in? %>
@@ -33,6 +32,8 @@
   <% end %>
   </p>
 </nav>
+
+<%= render 'shared/flash_messages' if flash.present? %>
 
 <%= yield %>
 
