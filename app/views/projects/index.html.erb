@@ -1,14 +1,37 @@
+<h1>Project Containers</h1>
+
+<%= form_for @container do |form| %>
+  <div class="form-group">
+    <%= form.label :path %>
+    <%= form.select(:path, @container_paths.zip(@container_paths)) %>
+  </div>
+  <div class="form-group">
+    <%= form.submit 'Save' %>
+  </div>
+<% end %>
+
+<table>
+  <tr>
+    <th>Path</th>
+    <th>Actions</th>
+  </tr>
+  <% @containers.each do |container| %> 
+    <tr>
+      <td><%= container.path %></td>
+      <td><%= link_to 'Delete', container_path(container), method: :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
 <h1>Projects</h1>
 <table>
   <tr>
     <th>Name</th>
-    <th>Path</th>
     <th>Time</th>
   </tr>
 <% @projects.each do |project| %>
   <tr>
     <td><%= project.name %></td>
-    <td><%= project.path %></td>
     <td><%= distance_of_time_in_words(project.entries.map(&:duration).inject(&:+)) %></td>
   </tr>
 <% end %>

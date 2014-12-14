@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   use_doorkeeper
   devise_for :users
-  root 'entries#index'
+  root 'reports#index'
 
   namespace :api do
     namespace :v1 do
@@ -9,7 +9,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :containers, only: [:new, :create, :index, :destroy, :delete]
+  resources :containers, only: [:create, :destroy]
   resources :entries,    only: [:index]
+  resources :reports,    only: [:index]
   resources :projects,   only: [:index]
 end
