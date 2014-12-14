@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 <head>
-  <title>LapsusRails</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
+<title>LapsusRails</title>
+<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+<%= csrf_meta_tags %>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
+<div class="container">
 <%= render 'shared/flash_messages' if flash.present? %>
 
 <nav class="navbar navbar-default" role="navigation">
-
   <% if user_signed_in? %>
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav navbar-left">
       <li><%= link_to 'Times', reports_path %></li>
       <li><%= link_to 'Projects', projects_path %></li>
       <li><%= link_to 'Entries', entries_path %></li>
@@ -22,17 +23,19 @@
 
   <p class="navbar-text pull-right">
   <% if user_signed_in? %>
-    Logged in as <strong><%= current_user.email %></strong>.
-    <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
-    <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+    <ul class="nav navbar-nav navbar-right">
+      <li><%= link_to current_user.email, edit_user_registration_path, :class => 'navbar-link' %></li>
+      <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+    </ul>
   <% else %>
-    <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
-    <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+      <li><%= link_to 'Sign up', new_user_registration_path, :class => 'navbar-link' %></li>
+      <li><%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %></li>
   <% end %>
-
   </p>
 </nav>
+
 <%= yield %>
 
+</div>
 </body>
 </html>

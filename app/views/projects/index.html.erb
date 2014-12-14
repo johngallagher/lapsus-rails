@@ -1,38 +1,53 @@
-<h1>Project Containers</h1>
+<div class="row">
+  <div class="col-md-6">
 
-<%= form_for @container do |form| %>
-  <div class="form-group">
-    <%= form.label :path %>
-    <%= form.select(:path, @container_paths.zip(@container_paths)) %>
+    <h1>Project Containers</h1>
+
+    <%= form_for @container, html: { class: "form-inline", role: "form" } do |form| %>
+      <div class="form-group">
+        <%= form.label :path, class: "sr-only" %>
+        <%= form.select(:path, @container_paths.zip(@container_paths), {}, { class: 'form-control', style: 'width: 100%;' }) %>
+      </div>
+      <div class="form-group">
+        <%= form.submit 'Save', class: "btn btn-default" %>
+      </div>
+    <% end %>
+
+    <% if @containers.present? %>
+      <table class="table">
+        <tr>
+          <th>Path</th>
+          <th>Actions</th>
+        </tr>
+        <% @containers.each do |container| %> 
+          <tr>
+            <td><%= container.path %></td>
+            <td><%= link_to 'Delete', container_path(container), method: :delete %></td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
+
   </div>
-  <div class="form-group">
-    <%= form.submit 'Save' %>
-  </div>
-<% end %>
+  <div class="col-md-6">
 
-<table>
-  <tr>
-    <th>Path</th>
-    <th>Actions</th>
-  </tr>
-  <% @containers.each do |container| %> 
-    <tr>
-      <td><%= container.path %></td>
-      <td><%= link_to 'Delete', container_path(container), method: :delete %></td>
-    </tr>
-  <% end %>
-</table>
+    <h1>Projects</h1>
 
-<h1>Projects</h1>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Time</th>
-  </tr>
-<% @projects.each do |project| %>
-  <tr>
-    <td><%= project.name %></td>
-    <td><%= distance_of_time_in_words(project.entries.map(&:duration).inject(&:+)) %></td>
-  </tr>
-<% end %>
-</table>
+    <% if @projects.present? %>
+      <table class="table">
+        <tr>
+          <th>Name</th>
+          <th>Time</th>
+        </tr>
+        <% @projects.each do |project| %>
+          <tr>
+            <td><%= project.name %></td>
+            <td><%= distance_of_time_in_words(project.entries.map(&:duration).inject(&:+)) %></td>
+          </tr>
+        <% end %>
+      </table>
+    <% else %>
+      <div>No projects. Add a container above.</div>
+    <% end %>
+
+</div>
