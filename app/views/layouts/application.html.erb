@@ -21,15 +21,17 @@
   <% end %>
 
   <p class="navbar-text pull-right">
-  <% if user_signed_in? %>
-    <ul class="nav navbar-nav navbar-right">
+    <% if user_signed_in? %>
+  <ul class="nav navbar-nav navbar-right">
       <li><%= link_to current_user.email, edit_user_registration_path, :class => 'navbar-link' %></li>
       <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
-    </ul>
-  <% else %>
+  </ul>
+    <% else %>
+  <ul class="nav navbar-nav navbar-left">
       <li><%= link_to 'Sign up', new_user_registration_path, :class => 'navbar-link' %></li>
       <li><%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %></li>
-  <% end %>
+  </ul>
+    <% end %>
   </p>
 </nav>
 
