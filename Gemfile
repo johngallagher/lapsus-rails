@@ -14,6 +14,7 @@ gem 'grape'
 gem "hashie_rails"
 gem 'devise'
 gem 'doorkeeper'
+gem 'chartkick'
 
 group :production do
   gem 'rails_12factor'

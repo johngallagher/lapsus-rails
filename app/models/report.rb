@@ -11,10 +11,12 @@ class Report
     end
   end
 
+  def entries_in_range
+    entries.where('started_at > ? and finished_at < ?', from, to)
+  end
+
   def grouped_entries
-    entries
-      .where('started_at > ? and finished_at < ?', from, to)
-      .group_by(&:project_id)
+    entries_in_range.group_by(&:project_id)
   end
 
   def from

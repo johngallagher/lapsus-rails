@@ -3,6 +3,10 @@ class ReportsController < ApplicationController
 
   def index
     @report = Report.new(daterange: report_params[:daterange], entries: Entry.for_user(current_user))
+    @entries = @report.entries_in_range.group_by(&:project_id).inject({}) { |memo, (pid, e)|
+      memo.merge({ e.first.project_name => (e.map(&:duration).inject(&:+) / 60) })
+    }
+
     render :index
   end
 
