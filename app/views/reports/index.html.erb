@@ -1,11 +1,6 @@
   <%= form_for(@report, method: :get, html: {id: 'report_form'}) do |form| %>
-    <div class="col-lg-4 pull-right">
-      <div class="input-group">
-        <%= form.text_field(:range, class: 'form-control') %>
-        <span class="input-group-btn">
-          <%= form.submit 'Refresh', class: 'btn btn-default' %>
-        </span>
-      </div>
+    <div class="input-group pull-right">
+      <%= form.text_field(:range, class: 'form-control') %>
     </div>
   <% end %>
 
