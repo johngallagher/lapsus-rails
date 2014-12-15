@@ -7,15 +7,19 @@
 <%= csrf_meta_tags %>
 <script type="text/javascript">
 $(document).ready(function() {
-  $('#daterange').daterangepicker({
+  $('#report_daterange').daterangepicker({
+    format: 'DD-MM-YYYY',
     ranges: {
       'Today': [new Date(), new Date()],
-      'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-      'Last 7 Days': [moment().subtract('days', 6), new Date()],
-      'Last 30 Days': [moment().subtract('days', 29), new Date()],
+      'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+      'Last 7 Days': [moment().subtract(6, 'days'), new Date()],
+      'Last 30 Days': [moment().subtract(29, 'days'), new Date()],
       'This Month': [moment().startOf('month'), moment().endOf('month')],
-      'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-    }
+      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    },
+  },
+  function(start, end) {
+    $('#report_form').submit();
   });
 });
 </script>
