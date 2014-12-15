@@ -1,7 +1,7 @@
   <%= form_for(@report, method: :get, html: {id: 'report_form'}) do |form| %>
     <div class="col-lg-4 pull-right">
       <div class="input-group">
-        <%= form.text_field(:daterange, class: 'form-control') %>
+        <%= form.text_field(:range, class: 'form-control') %>
         <span class="input-group-btn">
           <%= form.submit 'Refresh', class: 'btn btn-default' %>
         </span>
@@ -9,17 +9,17 @@
     </div>
   <% end %>
 
-  <%= pie_chart @entries%>
+  <%= pie_chart @report.run %>
 
 <table class='table'>
   <tr>
     <th>Project</th>
     <th>Time</th>
   </tr>
-  <% @report.projects.each do |project| %>
+  <% @report.run.each do |project, time| %>
     <tr>
-      <td><%= project.name %></td>
-      <td><%= distance_of_time_in_words(project.time) %></td>
+      <td><%= project %></td>
+      <td><%= as_hours_and_minutes(time) %></td>
     </tr>
   <% end %>
 </table>

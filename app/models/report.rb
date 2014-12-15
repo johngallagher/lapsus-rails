@@ -1,33 +1,37 @@
-class Report 
+require 'active_support/core_ext/date_time/calculations'
+
+class Report
   include ActiveModel::Model
-  attr_accessor :daterange, :entries
-  #def self.model_name
-    #'report'
-  #end
+  attr_accessor :range, :user
 
-  def projects
-    grouped_entries.map do |project_id, entries|
-      OpenStruct.new(name: entries.first.project_name, time: entries.map(&:duration).inject(&:+))
-    end
+  def run
+    results = ActiveRecord::Base.connection.exec_query(query).rows
+    results.inject({}) { |memo, result| memo.merge(Hash[*result]) }
   end
 
-  def entries_in_range
-    entries.where('started_at > ? and finished_at < ?', from, to)
-  end
-
-  def grouped_entries
-    entries_in_range.group_by(&:project_id)
+  private
+  def query
+    "select projects.name as project, SUM(entries.duration) as time
+            from entries
+            inner join projects on entries.`project_id` = projects.`id`
+            where entries.started_at > '#{from}' and entries.finished_at < '#{to}' and entries.user_id = #{user.id}
+            group by project_id;"
   end
 
   def from
-    DateTime.parse(date_range.first).at_beginning_of_day
+    range_as_dates.begin.at_beginning_of_day.to_s(:db)
   end
 
   def to
-    DateTime.parse(date_range.last).at_end_of_day
+    range_as_dates.end.at_end_of_day.to_s(:db)
   end
 
-  def date_range
-    daterange.split(' - ')
+  def range_as_dates
+    dates_from_range = range.split(' - ').map { |date| DateTime.parse(date) }
+    Range.new(*dates_from_range)
+  end
+
+  def range
+    @range || Time.now.strftime('%d-%m-%Y - %d-%m-%Y')
   end
 end
