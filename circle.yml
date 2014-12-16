@@ -1,9 +1,8 @@
 deployment:
   production:
     branch: master
+    commands:
+      - ./deploy_prod.sh
     heroku:
       appname: lapsus
 
-database:
-  override:
-    - bundle exec rake db:create db:migrate db:seed
