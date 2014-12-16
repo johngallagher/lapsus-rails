@@ -2,7 +2,6 @@ deployment:
   production:
     branch: master
     commands:
-      - ./deploy_prod.sh
-    heroku:
-      appname: lapsus
+      - git push git@heroku.com:lapsus.git $CIRCLE_SHA1:master
+      - heroku run rake db:migrate --app lapsus
 
