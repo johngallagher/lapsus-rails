@@ -6,6 +6,8 @@
     <th>Path</th>
     <th>Duration</th>
     <th>Project</th>
+    <th>Application Name</th>
+    <th>Application Bundle ID</th>
   </tr>
 
   <% @entries.each do |entry| %>
@@ -13,8 +15,10 @@
     <tr>
       <td><%= entry.started_at.strftime('%d/%m/%y %H:%M') %></td>
       <td><%= entry.path %></td>
-      <td><%= distance_of_time_in_words(entry.duration) %></td>
+      <td><%= as_hours_and_minutes_and_seconds(entry.duration) %></td>
       <td><%= entry.project_name %></td>
+      <td><%= entry.application_name %></td>
+      <td><%= entry.application_bundle_id %></td>
     </tr>
   <% end %>
 </table>

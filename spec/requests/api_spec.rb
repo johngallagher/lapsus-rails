@@ -36,10 +36,10 @@ describe 'lapsus api', type: :request do
       expect(Entry.first.project.path).to eq('/Users/John/Code/rails')
     end
 
-    it 'with a missing path it returns errors' do
-      post '/api/v1/entries', { entries: [{ started_at: "2013-01-01 18:00:00", finished_at: "2013-01-01 19:00:00" }]}, format: :json
+    it 'with a missing started at it returns errors' do
+      post '/api/v1/entries', { entries: [{ finished_at: "2013-01-01 19:00:00" }]}, format: :json
       expect(response).to have_http_status(:unprocessable_entity)
-      expect(JSON(response.body).first['errors']).to eq(["Path can't be blank"])
+      expect(JSON(response.body).first['errors']).to eq(["Started at can't be blank"])
     end
   end
 end

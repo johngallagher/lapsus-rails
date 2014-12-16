@@ -4,10 +4,13 @@ describe Entry do
   it { should respond_to :started_at }
   it { should respond_to :finished_at }
   it { should respond_to :path }
+  it { should respond_to :application_bundle_id }
+  it { should respond_to :application_name }
+
   it { should belong_to :project }
+
   it { should validate_presence_of :started_at}
   it { should validate_presence_of :finished_at }
-  it { should validate_presence_of :path }
 
   xit 'marks overlapping entries as invalid' do
     entry = create_entry(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00')

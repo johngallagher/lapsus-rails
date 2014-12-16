@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141213131954) do
+ActiveRecord::Schema.define(version: 20141216220825) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "containers", force: true do |t|
     t.string  "name"
@@ -28,6 +31,8 @@ ActiveRecord::Schema.define(version: 20141213131954) do
     t.integer  "duration"
     t.string   "path"
     t.integer  "user_id"
+    t.string   "application_bundle_id"
+    t.string   "application_name"
   end
 
   create_table "oauth_access_grants", force: true do |t|

@@ -3,7 +3,7 @@ class Entry < ActiveRecord::Base
   belongs_to :project
   before_save :calculate_duration
 
-  validates_presence_of :started_at, :finished_at, :path
+  validates_presence_of :started_at, :finished_at
 
   scope :for_user, lambda { |user| where(user_id: user.id) }
 
