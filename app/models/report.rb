@@ -9,7 +9,28 @@ class Report
     results.inject({}) { |memo, result| memo.merge(Hash[*result]) }
   end
 
+  def run_time_grouped
+    Entry
+      .where('started_at > ? and finished_at < ?', from, to)
+      .group(:project_id)
+      .group_by_hour(:started_at, format: "%01H%P")
+      .sum(:duration)
+      .inject({}) do |memo, ((project_id, time_label), value)|
+        memo.merge({
+        [project_id.nil? ? 'None' : Project.find(project_id).name, time_label] => value.to_f / 60
+        })
+      end
+  end
+
   private
+  def time_grouped_query
+    "select projects.name as project, SUM(entries.duration) as duration, FROM_UNIXTIME(round(UNIX_TIMESTAMP(started_at) / 3600) * 3600) as time
+            from entries
+            inner join projects on entries.`project_id` = projects.`id`
+            where entries.started_at > '#{from}' and entries.finished_at < '#{to}' and entries.user_id = #{user.id}
+            group by time;"
+  end
+
   def query
     "select projects.name as project, SUM(entries.duration) as time
             from entries

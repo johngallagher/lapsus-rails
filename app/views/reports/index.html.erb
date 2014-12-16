@@ -1,10 +1,19 @@
+<div class="row">
   <%= form_for(@report, method: :get, html: {id: 'report_form'}) do |form| %>
     <div class="input-group pull-right">
       <%= form.text_field(:range, class: 'form-control') %>
     </div>
   <% end %>
+</div>
 
-  <%= pie_chart @report.run %>
+<div class="row">
+  <div class="col-md-8">
+    <%= column_chart @report.run_time_grouped, stacked: true, library: { vAxis: { format: '#m' }} %>
+  </div>
+  <div class="col-md-4">
+    <%= pie_chart @report.run %>
+  </div>
+</div>
 
 <table class='table'>
   <tr>
