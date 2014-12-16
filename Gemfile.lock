@@ -75,6 +75,8 @@ GEM
       rack-accept
       rack-mount
       virtus (>= 1.0.0)
+    groupdate (2.3.0)
+      activesupport (>= 3)
     hashie (3.3.2)
     hashie_rails (0.0.1)
       hashie (>= 3.0)
@@ -202,6 +204,7 @@ DEPENDENCIES
   doorkeeper
   factory_girl_rails
   grape
+  groupdate
   hashie_rails
   jbuilder (~> 2.0)
   jquery-rails
