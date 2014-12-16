@@ -5,12 +5,21 @@ class Report
   attr_accessor :range, :user
 
   def run
-    results = ActiveRecord::Base.connection.exec_query(query).rows
-    results.inject({}) { |memo, result| memo.merge(Hash[*result]) }
+    Entry
+      .for_user(user)
+      .where('started_at > ? and finished_at < ?', from, to)
+      .group(:project_id)
+      .sum(:duration)
+      .inject({}) do |memo, (project_id, value)|
+        memo.merge({
+        project_id.nil? ? 'None' : Project.find(project_id).name => value
+        })
+      end
   end
 
   def run_time_grouped
     Entry
+      .for_user(user)
       .where('started_at > ? and finished_at < ?', from, to)
       .group(:project_id)
       .group_by_hour(:started_at, format: "%01H%P")
