@@ -22,7 +22,7 @@ class Report
       .for_user(user)
       .where('started_at > ? and finished_at < ?', from, to)
       .group(:project_id)
-      .group_by_hour(:started_at, format: "%01H%P")
+      .group_by_hour(:started_at, format: "%01H:00")
       .sum(:duration)
       .inject({}) do |memo, ((project_id, time_label), value)|
         memo.merge({
