@@ -2,7 +2,7 @@
 <table class='table'>
   <tr>
     <th>Started At</th>
-    <th>Path</th>
+    <th>URL</th>
     <th>Duration</th>
     <th>Project</th>
     <th>Application Name</th>
@@ -13,7 +13,7 @@
 
     <tr>
       <td><%= entry.started_at.strftime('%d/%m/%y %H:%M') %></td>
-      <td><%= entry.path %></td>
+      <td><%= entry.url %></td>
       <td><%= as_hours_and_minutes_and_seconds(entry.duration) %></td>
       <td><%= entry.project_name %></td>
       <td><%= entry.application_name %></td>
