@@ -28,12 +28,6 @@ class Entry < ActiveRecord::Base
       .uniq
   end
 
-  def project_name
-    return '' if project.nil?
-
-    project.name
-  end
-
   def path
     if self.url
       URI(self.url).path

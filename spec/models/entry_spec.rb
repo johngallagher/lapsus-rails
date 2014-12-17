@@ -137,15 +137,10 @@ describe Entry do
     expect(entry.duration).to eq(3600)
   end
 
-
-  it 'with no project it returns none' do
-    expect(create_entry.project_name).to eq('None')
-  end
-
   it 'with a project it returns the project name' do
     project = create_project(name: 'John')
     entry = create_entry(project_id: project.id)
-    expect(entry.project_name).to eq('John')
+    expect(entry.project.name).to eq('John')
   end
 end
 

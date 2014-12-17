@@ -15,7 +15,7 @@
       <td><%= entry.started_at.strftime('%d/%m/%y %H:%M') %></td>
       <td><%= entry.url %></td>
       <td><%= as_hours_and_minutes_and_seconds(entry.duration) %></td>
-      <td><%= entry.project_name %></td>
+      <td><%= entry.project ? entry.project.name : 'ERROR' %></td>
       <td><%= entry.application_name %></td>
       <td><%= entry.application_bundle_id %></td>
     </tr>
