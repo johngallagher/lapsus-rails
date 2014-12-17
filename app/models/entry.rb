@@ -29,7 +29,7 @@ class Entry < ActiveRecord::Base
   end
 
   def project_name
-    return 'None' if project.nil?
+    return '' if project.nil?
 
     project.name
   end

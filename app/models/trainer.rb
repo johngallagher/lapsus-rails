@@ -18,8 +18,4 @@ class Trainer
       train_entry(entry)
     end
   end
-
-  def self.untrain_entries(entries)
-    entries.each { |entry| entry.project = nil; entry.save! }
-  end
 end
