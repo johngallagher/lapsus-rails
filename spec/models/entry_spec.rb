@@ -13,6 +13,14 @@ describe Entry do
   it { should validate_presence_of :started_at}
   it { should validate_presence_of :finished_at }
 
+  it 'should not allow absolute urls without a path' do
+    expect(new_entry(url: 'file://')).to be_invalid
+  end
+
+  it 'allows url to be blank' do
+    expect(new_entry(url: '')).to be_valid
+  end
+
   it 'calculates the path from the url on new' do
     expect(new_entry(url: 'file://localhost/Users/John').path).to eq('/Users/John')
     expect(new_entry(url: 'file:///Users/John').path).to eq('/Users/John')
