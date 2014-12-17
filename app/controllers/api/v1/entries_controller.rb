@@ -20,7 +20,7 @@ class Api::V1::EntriesController < ApplicationController
 
   def trained(entries)
     entries.each do |entry|
-      Trainer.train_entry(entry)
+      Trainer.train_entry(entry, :last_active)
       entry.save!
       entry
     end

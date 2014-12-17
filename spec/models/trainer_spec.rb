@@ -6,7 +6,7 @@ describe Trainer do
     entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/lib/rails/main.rb', user_id: user.id)
     FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
 
-    trained_entry = Trainer.train_entry(entry)
+    trained_entry = Trainer.train_entry(entry, :normal)
 
     expect(trained_entry.project).to be_present
     expect(trained_entry.project.path).to eq('/Users/John/Code/rails')
@@ -19,7 +19,7 @@ describe Trainer do
     entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
     FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
 
-    trained_entry = Trainer.train_entry(entry)
+    trained_entry = Trainer.train_entry(entry, :normal)
 
     expect(trained_entry.project).to be_present
     expect(trained_entry.project.path).to eq('/Users/John/Code/rails')
@@ -33,7 +33,7 @@ describe Trainer do
     entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/README.md', user_id: user.id)
     FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
 
-    trained_entry = Trainer.train_entry(entry)
+    trained_entry = Trainer.train_entry(entry, :normal)
 
     expect(trained_entry.project).to eq(none)
     expect(trained_entry).to_not be_changed
@@ -45,10 +45,38 @@ describe Trainer do
     entry = FactoryGirl.create(:entry, url: 'file:///Users/John/.vimrc', user_id: user.id)
     FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
 
-    trained_entry = Trainer.train_entry(entry)
+    trained_entry = Trainer.train_entry(entry, :normal)
 
     expect(trained_entry.project).to eq(none)
     expect(trained_entry).to_not be_changed
+  end
+
+  describe 'last active mode' do
+    it 'assigns non project entries to last active project' do
+      none = FactoryGirl.create(:project, name: 'None', preset: true, path: '')
+      user = FactoryGirl.create(:user)
+      rails = FactoryGirl.create(:project, path: '/Users/John/Code/rails')
+      entry_1 = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id, project_id: rails.id)
+      entry_2 = FactoryGirl.create(:entry, url: 'file:///Users/John/.vimrc', user_id: user.id, project_id: none.id)
+      FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
+
+      trained_entry = Trainer.train_entry(entry_2, :last_active)
+
+      expect(trained_entry.project).to eq(rails)
+    end
+
+    it 'leaves untouched non project entries before active project entries' do
+      none = FactoryGirl.create(:project, name: 'None', preset: true, path: '')
+      user = FactoryGirl.create(:user)
+      rails = FactoryGirl.create(:project, path: '/Users/John/Code/rails')
+      entry_1 = FactoryGirl.create(:entry, url: 'file:///Users/John/.vimrc', user_id: user.id, project_id: none.id)
+      entry_2 = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id, project_id: rails.id)
+      FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
+
+      trained_entry = Trainer.train_entry(entry_1, :last_active)
+
+      expect(trained_entry.project).to eq(none)
+    end
   end
 end
 

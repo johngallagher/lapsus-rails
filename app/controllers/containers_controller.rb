@@ -4,7 +4,7 @@ class ContainersController < ApplicationController
     @container = Container.new(container_params)
     @container.user_id = current_user.id
     if @container.save
-      Trainer.train_for(current_user)
+      Trainer.train_for(current_user, :last_active)
       redirect_to projects_path
     else
       flash.now[:alert] = @container.errors.full_messages.join(', ')
@@ -15,7 +15,7 @@ class ContainersController < ApplicationController
   def destroy
     container = Container.for_user(current_user).find(params.permit(:id)[:id])
     container.destroy
-    Trainer.train_for(current_user)
+    Trainer.train_for(current_user, :last_active)
     redirect_to projects_path
   end
 
