@@ -23,6 +23,14 @@ class Entry < ActiveRecord::Base
     project.name
   end
 
+  def path
+    if self.url
+      URI(self.url).path
+    else
+      ''
+    end
+  end
+
   private
   def calculate_duration
     self.duration = self.finished_at - self.started_at

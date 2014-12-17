@@ -14,7 +14,8 @@ describe 'lapsus api', type: :request do
       expect(Entry.count).to eq(1)
       expect(Entry.first.started_at).to eq(rails_gemfile_document[:started_at])
       expect(Entry.first.finished_at).to eq(rails_gemfile_document[:finished_at])
-      expect(Entry.first.path).to eq(rails_gemfile_document[:path])
+      expect(Entry.first.url).to eq(rails_gemfile_document[:url])
+      expect(Entry.first.path).to eq('/Users/John/Code/rails/Gemfile')
       expect(Entry.first.user_id).to eq(@user.id)
 
       expect(Entry.first.project).to be_nil
@@ -28,7 +29,8 @@ describe 'lapsus api', type: :request do
       expect(Entry.count).to eq(1)
       expect(Entry.first.started_at).to eq(rails_gemfile_document[:started_at])
       expect(Entry.first.finished_at).to eq(rails_gemfile_document[:finished_at])
-      expect(Entry.first.path).to eq(rails_gemfile_document[:path])
+      expect(Entry.first.url).to eq(rails_gemfile_document[:url])
+      expect(Entry.first.path).to eq('/Users/John/Code/rails/Gemfile')
       expect(Entry.first.user_id).to eq(@user.id)
 
       expect(Entry.first.project).to be_present
@@ -48,6 +50,6 @@ def rails_gemfile_document
   {     
     started_at: "2013-07-01 18:23:47",
     finished_at: "2013-07-01 18:23:47",
-    path: "/Users/John/Code/rails/Gemfile"
+    url: "file:///Users/John/Code/rails/Gemfile"
   }
 end

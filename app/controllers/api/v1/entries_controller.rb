@@ -4,7 +4,7 @@ class Api::V1::EntriesController < ApplicationController
 
   def create
     entries = params[:entries].map do |entry|
-      Entry.new(entry.permit(:started_at, :finished_at, :path, :application_bundle_id, :application_name).merge(user_id: current_resource_owner_id))
+      Entry.new(entry.permit(:started_at, :finished_at, :url, :application_bundle_id, :application_name).merge(user_id: current_resource_owner_id))
     end
 
     if invalid(entries).empty?

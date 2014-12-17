@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141216220825) do
+ActiveRecord::Schema.define(version: 20141217040126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20141216220825) do
     t.integer  "user_id"
     t.string   "application_bundle_id"
     t.string   "application_name"
+    t.string   "url"
   end
 
   create_table "oauth_access_grants", force: true do |t|

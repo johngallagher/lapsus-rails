@@ -4,6 +4,7 @@ describe Entry do
   it { should respond_to :started_at }
   it { should respond_to :finished_at }
   it { should respond_to :path }
+  it { should respond_to :url }
   it { should respond_to :application_bundle_id }
   it { should respond_to :application_name }
 
@@ -11,6 +12,14 @@ describe Entry do
 
   it { should validate_presence_of :started_at}
   it { should validate_presence_of :finished_at }
+
+  it 'calculates the path from the url on new' do
+    expect(new_entry(url: 'file://localhost/Users/John').path).to eq('/Users/John')
+    expect(new_entry(url: 'file:///Users/John').path).to eq('/Users/John')
+    expect(new_entry(url: 'http://www.google.co.uk/search?q=hello').path).to eq('/search')
+    expect(new_entry(url: nil).path).to eq('')
+    expect(new_entry(url: '').path).to eq('')
+  end
 
   xit 'marks overlapping entries as invalid' do
     entry = create_entry(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00')
@@ -138,12 +147,17 @@ def create_project(attrs={})
 end
 
 def new_entry(attrs={})
-  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', path: '/Users/John'}
+  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00'}
+  Entry.new(defaults.merge(attrs))
+end
+
+def new_entry(attrs={})
+  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00'}
   Entry.new(defaults.merge(attrs))
 end
 
 def create_entry(attrs={})
-  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00', path: '/Users/John'}
+  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00'}
   Entry.create(defaults.merge(attrs))
 end
 

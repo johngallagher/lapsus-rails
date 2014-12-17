@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Trainer do
   it 'when file is deeply nested within a project directory in the container it assigns a project' do
     user = FactoryGirl.create(:user)
-    entry = FactoryGirl.create(:entry, path: '/Users/John/Code/rails/lib/rails/main.rb', user_id: user.id)
+    entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/lib/rails/main.rb', user_id: user.id)
     FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
 
     trained_entry = Trainer.train_entry(entry)
@@ -15,7 +15,7 @@ describe Trainer do
 
   it 'when file is within a project directory in the container it assigns a project' do
     user = FactoryGirl.create(:user)
-    entry = FactoryGirl.create(:entry, path: '/Users/John/Code/rails/Gemfile', user_id: user.id)
+    entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
     FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
 
     trained_entry = Trainer.train_entry(entry)
@@ -27,7 +27,7 @@ describe Trainer do
 
   it 'when file is in the container it doesnt assign any project' do
     user = FactoryGirl.create(:user)
-    entry = FactoryGirl.create(:entry, path: '/Users/John/Code/README.md', user_id: user.id)
+    entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/README.md', user_id: user.id)
     FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
 
     trained_entry = Trainer.train_entry(entry)
@@ -37,7 +37,7 @@ describe Trainer do
 
   it 'when entry is outside a container it doesnt assign it to a project' do
     user = FactoryGirl.create(:user)
-    entry = FactoryGirl.create(:entry, path: '/Users/John/.vimrc', user_id: user.id)
+    entry = FactoryGirl.create(:entry, url: 'file:///Users/John/.vimrc', user_id: user.id)
     FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
 
     trained_entry = Trainer.train_entry(entry)
