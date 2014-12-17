@@ -1,6 +1,7 @@
 class Entry < ActiveRecord::Base
   include Pathable
   belongs_to :project
+  belongs_to :user
   before_save :calculate_duration
 
   validates_presence_of :started_at, :finished_at
