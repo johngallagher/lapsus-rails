@@ -6,6 +6,10 @@ class Project < ActiveRecord::Base
     Project.create(name: name, preset: true)
   end
 
+  def self.none
+    Project.where(preset: true).first
+  end
+
   def self.find_or_create_from_container_and_entry(container, entry)
     find_or_create_by(path: container.project_path_from_entry(entry), preset: false) do |project|
       project.name = container.project_name_from_entry(entry)
