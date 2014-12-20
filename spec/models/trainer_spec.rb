@@ -9,9 +9,7 @@ describe Trainer do
 
       trained_entry = Trainer.train_entry(entry, :normal)
 
-      expect(trained_entry.project).to be_present
-      expect(trained_entry.project.name).to eq('None')
-      expect(trained_entry.project.preset).to eq(true)
+      expect(trained_entry.project).to eq(user.none_project)
       expect(trained_entry).to_not be_changed
     end
   end
@@ -47,8 +45,7 @@ describe Trainer do
 
       trained_entry = Trainer.train_entry(entry, :normal)
 
-      expect(trained_entry.project.name).to eq('None')
-      expect(trained_entry.project.preset).to eq(true)
+      expect(trained_entry.project).to eq(user.none_project)
       expect(trained_entry).to_not be_changed
     end
 
@@ -58,8 +55,7 @@ describe Trainer do
 
       trained_entry = Trainer.train_entry(entry, :normal)
 
-      expect(trained_entry.project.name).to eq('None')
-      expect(trained_entry.project.preset).to eq(true)
+      expect(trained_entry.project).to eq(user.none_project)
       expect(trained_entry).to_not be_changed
     end
 
@@ -83,8 +79,8 @@ describe Trainer do
 
         trained_entry = Trainer.train_entry(entry_1, :last_active)
 
-        expect(trained_entry.project.name).to eq('None')
-        expect(trained_entry.project.preset).to eq(true)
+        expect(trained_entry.project).to eq(user.none_project)
+        expect(trained_entry).to_not be_changed
       end
     end
   end
