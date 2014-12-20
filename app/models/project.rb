@@ -1,5 +1,7 @@
 class Project < ActiveRecord::Base
   has_many :entries
+  belongs_to :user
+
   scope :for_user, lambda { |user| where(user_id: user.id) }
   scope :preset, lambda { where(preset: true) }
 

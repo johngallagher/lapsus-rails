@@ -3,6 +3,8 @@ FactoryGirl.define do
     sequence(:email) { |n| "user#{n}@example.com" }
     password               "password"
     password_confirmation  "password"
+
+    after(:create) { |u| Project.create_none_for_user!(u) }
   end
 
   factory :container do

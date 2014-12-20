@@ -18,7 +18,9 @@ describe 'lapsus api', type: :request do
       expect(Entry.first.path).to eq('/Users/John/Code/rails/Gemfile')
       expect(Entry.first.user_id).to eq(@user.id)
 
-      expect(Entry.first.project).to be_nil
+      expect(Entry.first.project).to be_present
+      expect(Entry.first.project.preset).to eq(true)
+      expect(Entry.first.project.name).to eq('None')
     end
 
     it 'with a project that matches the document creates an entry with project' do
