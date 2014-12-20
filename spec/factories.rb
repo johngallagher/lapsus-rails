@@ -13,6 +13,12 @@ FactoryGirl.define do
   factory :project do
     name "Code"
     path "/Users/John/Code/rails"
+
+    trait :none do
+      preset true
+      name   'None' 
+      path   ''
+    end
   end
 
   factory :entry do

@@ -1,13 +1,14 @@
 class Project < ActiveRecord::Base
   has_many :entries
   scope :for_user, lambda { |user| where(user_id: user.id) }
+  scope :preset, lambda { where(preset: true) }
 
   def self.preset_with_name(name)
     Project.create(name: name, preset: true)
   end
 
-  def self.none
-    Project.where(preset: true).first
+  def self.none_for_user(user)
+    Project.for_user(user).preset.first
   end
 
   def self.find_or_create_from_container_and_entry(container, entry)
