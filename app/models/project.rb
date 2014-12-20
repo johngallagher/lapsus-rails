@@ -3,8 +3,8 @@ class Project < ActiveRecord::Base
   scope :for_user, lambda { |user| where(user_id: user.id) }
   scope :preset, lambda { where(preset: true) }
 
-  def self.preset_with_name(name)
-    Project.create(name: name, preset: true)
+  def self.create_none_for_user!(user)
+    Project.create!(name: 'None', preset: true, user_id: user.id, path: '')
   end
 
   def self.none_for_user(user)
