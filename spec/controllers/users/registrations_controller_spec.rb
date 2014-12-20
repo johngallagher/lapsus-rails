@@ -16,5 +16,4 @@ describe Users::RegistrationsController, type: :controller do
       expect(none.path).to eq('')
     end
   end
-
 end

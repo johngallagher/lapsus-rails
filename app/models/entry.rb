@@ -18,6 +18,10 @@ class Entry < ActiveRecord::Base
     self.errors.add(:url, "must be valid: #{e.message}")
   end
   
+  def untrain
+    self.project = Project.none_for_user(self.user)
+  end
+
   def overlapping_entries
     overlapping_start                = Entry.where('started_at < ? AND finished_at > ?', self.finished_at, self.finished_at)
     overlapping_end                  = Entry.where('finished_at > ? AND started_at < ?', self.started_at, self.started_at)
