@@ -9,11 +9,14 @@ describe Container do
     expect(container.project_path_from_entry(entry)).to eq('/Users/John/Code/rails')
   end
 
+  describe 'contains project for entry' do
+
+  end
+
   describe 'possible paths' do
     let(:user) { FactoryGirl.create(:user) }
 
     it 'with no containers and one entry gives all possible container paths' do
-      user = FactoryGirl.create(:user)
       FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
       expect(Container.possible_paths(user)).to eq([
         '/Users',
@@ -23,7 +26,6 @@ describe Container do
     end
 
     it 'with no containers and two entries gives combined possible paths' do
-      user = FactoryGirl.create(:user)
       FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
       FactoryGirl.create(:entry, url: 'file:///Users/John/PersonalCode/Home/lapsus/main.rb', user_id: user.id)
       expect(Container.possible_paths(user)).to eq([
@@ -36,7 +38,6 @@ describe Container do
     end
 
     it 'with a container it excludes all conflicting upper directories' do
-      user = FactoryGirl.create(:user)
       FactoryGirl.create(:container, path: '/Users/John', user_id: user.id)
       FactoryGirl.create(:entry, url: 'file:///Users/John/Work/Programming/rails/Gemfile', user_id: user.id)
       FactoryGirl.create(:entry, url: 'file:///Users/Mike/Personal/gems/lapsus/main.rb', user_id: user.id)
@@ -64,9 +65,7 @@ describe Container do
       entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/lapsus/main.rb')
       expect(Container.possible_paths_for(entry, Container.all)).to eq(['/Users', '/Users/John', '/Users/John/Code'])
     end
-
   end
-
 end
 
 def assuming_a_user
