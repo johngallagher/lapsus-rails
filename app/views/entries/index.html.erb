@@ -1,23 +1,31 @@
 <h1>Entries</h1>
-<table class='table'>
-  <tr>
-    <th>Started At</th>
-    <th>URL</th>
-    <th>Duration</th>
-    <th>Project</th>
-    <th>Application Name</th>
-    <th>Application Bundle ID</th>
-  </tr>
+<div class="table-responsive">
+  <table class='table table-condensed'>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>URL</th>
+        <th>Duration</th>
+        <th>Project</th>
+        <th>Application Bundle ID</th>
+      </tr>
+    </thead>
 
-  <% @entries.each do |entry| %>
+    <tbody>
+    <% @entries.each do |entry| %>
+      <tr>
+        <td><%= entry.id%></td>
+        <td><%= entry.started_at.strftime('%H:%M:%S') %></td>
+        <td><%= entry.finished_at.strftime('%H:%M:%S') %></td>
+        <td><small><%= truncate(entry.url, length: 100) %></small></td>
+        <td><%= as_hours_and_minutes_and_seconds(entry.duration) %></td>
+        <td><%= entry.project ? entry.project.name : 'ERROR' %></td>
+        <td><%= entry.application_bundle_id %></td>
+      </tr>
+    <% end %>
+    </tbody>
 
-    <tr>
-      <td><%= entry.started_at.strftime('%d/%m/%y %H:%M') %></td>
-      <td><%= entry.url %></td>
-      <td><%= as_hours_and_minutes_and_seconds(entry.duration) %></td>
-      <td><%= entry.project ? entry.project.name : 'ERROR' %></td>
-      <td><%= entry.application_name %></td>
-      <td><%= entry.application_bundle_id %></td>
-    </tr>
-  <% end %>
-</table>
+  </table>
+</div>
