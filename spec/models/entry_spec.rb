@@ -21,6 +21,16 @@ describe Entry do
     expect(new_entry(url: '')).to be_valid
   end
 
+  it 'can be untrained' do
+    user = FactoryGirl.create(:user)
+    project = FactoryGirl.create(:project) 
+    entry = FactoryGirl.create(:entry, project: project, user: user)
+
+    expect(entry.project).to eq(project)
+    entry.untrain
+    expect(entry.project).to eq(user.none_project)
+  end
+
   it 'calculates the path from the url on new' do
     expect(new_entry(url: 'file://localhost/Users/John').path).to eq('/Users/John')
     expect(new_entry(url: 'file:///Users/John').path).to eq('/Users/John')

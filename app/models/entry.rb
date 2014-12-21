@@ -4,7 +4,7 @@ class Entry < ActiveRecord::Base
   belongs_to :user
   before_save :calculate_duration
 
-  validates_presence_of :started_at, :finished_at
+  validates_presence_of :started_at, :finished_at, :project
   validate :url_must_be_blank_or_valid
 
   scope :ascending, lambda { order('started_at ASC') }
