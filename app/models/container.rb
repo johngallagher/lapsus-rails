@@ -21,6 +21,8 @@ class Container < ActiveRecord::Base
   end
 
   def contains_project_for_entry?(entry)
+    return false if entry_is_non_document?(entry)
+
     contains_entry?(entry) && entry_nested_within_project_folder?(entry)
   end
 
@@ -33,6 +35,10 @@ class Container < ActiveRecord::Base
   end
 
   private
+  def entry_is_non_document?(entry)
+    URI(entry.url).scheme != 'file'
+  end
+
   def entry_nested_within_project_folder?(entry)
     entry.path_components.length >= path_components.length + 2
   end

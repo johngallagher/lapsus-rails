@@ -7,6 +7,7 @@ class Entry < ActiveRecord::Base
   validates_presence_of :started_at, :finished_at
   validate :url_must_be_blank_or_valid
 
+  scope :ascending, lambda { order('started_at ASC') }
   scope :for_user, lambda { |user| where(user_id: user.id) }
 
   def url_must_be_blank_or_valid
@@ -20,6 +21,10 @@ class Entry < ActiveRecord::Base
   
   def untrain
     self.project = Project.none_for_user(self.user)
+  end
+
+  def non_document?
+    URI(self.url).scheme != 'file'
   end
 
   def overlapping_entries
