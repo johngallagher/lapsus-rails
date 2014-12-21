@@ -28,13 +28,8 @@ class Entry < ActiveRecord::Base
   end
 
   def overlapping_entries
-    overlapping_start                = Entry.where('started_at < ? AND finished_at > ?', self.finished_at, self.finished_at)
-    overlapping_end                  = Entry.where('finished_at > ? AND started_at < ?', self.started_at, self.started_at)
-    inside                           = Entry.where('started_at > ? AND finished_at < ?', self.started_at, self.finished_at)
-    exactly_overlapping_start_or_end = Entry.where('started_at = ? OR finished_at = ?', self.started_at, self.finished_at)
-    (overlapping_start + overlapping_end + inside + exactly_overlapping_start_or_end)
-      .reject {|entry| entry == self }
-      .uniq
+    overlapping = Entry.where('(started_at < ? AND finished_at > ?) OR (finished_at > ? AND started_at < ?) OR (started_at > ? AND finished_at < ?) OR (started_at = ? OR finished_at = ?)', self.started_at, self.finished_at, self.started_at, self.finished_at, self.started_at, self.finished_at, self.started_at, self.finished_at)
+    overlapping.reject {|entry| entry == self }.uniq
   end
 
   def path
