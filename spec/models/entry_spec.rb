@@ -22,14 +22,14 @@ describe Entry do
 
   it 'when newing then saving it sets the default project to none' do
     user = FactoryGirl.create(:user)
-    entry = Entry.new(started_at: Time.now, finished_at: 1.second.ago, user_id: user.id)
+    entry = user.new_entry(started_at: Time.now, finished_at: 1.second.ago)
     expect(entry.project).to eq(user.none_project)
     expect(entry).to be_valid
   end
 
   it 'when creating it sets the default project to none' do
     user = FactoryGirl.create(:user)
-    entry = Entry.create(started_at: Time.now, finished_at: 1.second.ago, user_id: user.id)
+    entry = user.create_entry(started_at: Time.now, finished_at: 1.second.ago)
     expect(entry.project).to eq(user.none_project)
     expect(entry).to be_valid
   end
@@ -45,7 +45,7 @@ describe Entry do
   it 'can be untrained' do
     user = FactoryGirl.create(:user)
     project = FactoryGirl.create(:project) 
-    entry = FactoryGirl.create(:entry, project: project, user: user)
+    entry = user.create_entry(started_at: Time.now, finished_at: Time.now, project_id: project.id)
 
     expect(entry.project).to eq(project)
     entry.untrain
@@ -176,25 +176,24 @@ describe Entry do
 end
 
 def create_project(attrs={})
-  defaults = { name: 'John', path: '/Users/John' }
+  user = FactoryGirl.create(:user)
+  defaults = { name: 'John', path: '/Users/John', user_id: user.id }
   Project.create(defaults.merge(attrs))
 end
 
 def new_entry(attrs={})
-  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00'}
-  Entry.new(defaults.merge(attrs))
-end
-
-def new_entry(attrs={})
-  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00'}
-  Entry.new(defaults.merge(attrs))
+  user = FactoryGirl.create(:user)
+  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00' }
+  user.new_entry(defaults.merge(attrs))
 end
 
 def create_entry(attrs={})
-  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00'}
-  Entry.create(defaults.merge(attrs))
+  user = FactoryGirl.create(:user)
+  defaults = { started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00' }
+  user.create_entry(defaults.merge(attrs))
 end
 
 def assuming_a_container(path)
-  Container.create(name: 'Code', path: path)
+  user = FactoryGirl.create(:user)
+  FactoryGirl.create(:container, name: 'Code', path: path, user_id: user.id)
 end

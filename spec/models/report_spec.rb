@@ -4,7 +4,7 @@ describe Report do
   it 'defaults to today for the range' do
     john = assuming_a_user
     lapsus = assuming_a_project_for_user('lapsus', john)
-    assuming_an_entry_for_project(1.minute.ago, Time.now, lapsus)
+    assuming_an_entry_for_project(1.minute.ago, Time.now, lapsus, john)
 
     report = Report.new(user: john)
     expect(report.run).to eq({ 'lapsus' => 60 })
@@ -14,7 +14,7 @@ describe Report do
     mike = assuming_a_user
     john = assuming_a_user
     lapsus = assuming_a_project_for_user('lapsus', john)
-    assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus)
+    assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
 
     report = Report.new(range: '01-01-2014 - 01-01-2014', user: mike)
 
@@ -24,7 +24,7 @@ describe Report do
   it 'with one project and one entry it shows total time' do
     john = assuming_a_user
     lapsus = assuming_a_project_for_user('lapsus', john)
-    assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus)
+    assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
 
     report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
 
@@ -34,8 +34,8 @@ describe Report do
   it 'with two entries for the same project it returns sum for projects' do
     john = assuming_a_user
     lapsus = assuming_a_project_for_user('lapsus', john)
-    assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus)
-    assuming_an_entry_for_project('01-01-2014 00:02:00', '01-01-2014 00:03:00', lapsus)
+    assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
+    assuming_an_entry_for_project('01-01-2014 00:02:00', '01-01-2014 00:03:00', lapsus, john)
 
     report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
 
@@ -46,8 +46,8 @@ describe Report do
     john = assuming_a_user
     lapsus = assuming_a_project_for_user('lapsus', john)
     rails = assuming_a_project_for_user('rails', john)
-    assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus)
-    assuming_an_entry_for_project('01-01-2014 00:02:00', '01-01-2014 00:03:00', rails)
+    assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
+    assuming_an_entry_for_project('01-01-2014 00:02:00', '01-01-2014 00:03:00', rails, john)
 
     report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
 
@@ -64,6 +64,6 @@ def assuming_a_project_for_user(name, user)
   FactoryGirl.create(:project, name: name, user_id: user.id)
 end
 
-def assuming_an_entry_for_project(started_at, finished_at, project)
-  FactoryGirl.create(:entry, started_at: started_at, finished_at: finished_at, project: project, user_id: project.user_id)
+def assuming_an_entry_for_project(started_at, finished_at, project, user)
+  FactoryGirl.create(:entry, started_at: started_at, finished_at: finished_at, project: project, user_id: user.id)
 end

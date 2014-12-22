@@ -7,10 +7,11 @@ class Api::V1::EntriesController < ApplicationController
       Entry.new(entry.permit(:started_at, :finished_at, :url, :application_bundle_id, :application_name).merge(user_id: current_resource_owner_id))
     end
 
-    if invalid(entries).empty?
-      render json: trained(entries).to_json, status: :created
+    trained_entries = trained(entries)
+    if invalid(trained_entries).empty?
+      render json: trained_entries.to_json, status: :created
     else
-      render json: invalid(entries).map { |entry| { entry: entry, errors: entry.errors.full_messages } }.to_json, status: :unprocessable_entity
+      render json: invalid(trained_entries).map { |entry| { entry: entry, errors: entry.errors.full_messages } }.to_json, status: :unprocessable_entity
     end
   end
 
@@ -21,7 +22,6 @@ class Api::V1::EntriesController < ApplicationController
   def trained(entries)
     entries.each do |entry|
       Trainer.train_entry(entry, :last_active)
-      entry.save!
       entry
     end
   end
