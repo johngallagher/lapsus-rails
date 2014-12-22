@@ -112,20 +112,18 @@ describe Trainer do
           expect(trained_entry_2.project).to eq(rails)
         end
 
-        xit 'with a time gap of 10 seconds between entries it sets last active project' do
+        it 'with a gap between entries less than the threshold it sets last active project' do
           rails = FactoryGirl.create(:project, path: '/Users/John/Code/rails')
-          entry_1 = FactoryGirl.create(:entry, started_at: 13.seconds.ago, finished_at: 12.seconds.ago, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id, project_id: rails.id)
+          entry_1 = FactoryGirl.create(:entry, started_at: 12.seconds.ago, finished_at: 11.seconds.ago, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id, project_id: rails.id)
           entry_2 = FactoryGirl.create(:entry, started_at: 2.seconds.ago, finished_at: 1.second.ago, url: '', user_id: user.id, project_id: user.none_project.id)
           FactoryGirl.create(:container, path: '/Users/John/Code', user_id: user.id)
 
-          trained_entry_1 = Trainer.train_entry(entry_1, :last_active)
           trained_entry_2 = Trainer.train_entry(entry_2, :last_active)
 
-          expect(trained_entry_1.project).to eq(rails)
           expect(trained_entry_2.project).to eq(rails)
         end
 
-        it 'with a time gap of 11 seconds between entries it doesnt look at the last active project' do
+        it 'with a gap between entries above the threshold it doesnt look at the last active project' do
           rails = FactoryGirl.create(:project, path: '/Users/John/Code/rails')
           entry_1 = FactoryGirl.create(:entry, started_at: 14.seconds.ago, finished_at: 13.seconds.ago, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id, project_id: rails.id)
           entry_2 = FactoryGirl.create(:entry, started_at: 2.seconds.ago, finished_at: 1.second.ago, url: '', user_id: user.id, project_id: user.none_project.id)

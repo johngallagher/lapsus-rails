@@ -1,4 +1,5 @@
 class Entry < ActiveRecord::Base
+  SEARCH_WINDOW = 10
   include Pathable
   belongs_to :project
   belongs_to :user
@@ -23,6 +24,15 @@ class Entry < ActiveRecord::Base
   
   def untrain
     self.project = Project.none_for_user(self.user)
+  end
+
+  def previous
+    Entry
+      .for_user(self.user)
+      .ascending
+      .where.not(id: self.id)
+      .where('finished_at >= ? AND finished_at <= ?', self.started_at - SEARCH_WINDOW, self.started_at)
+      .first
   end
 
   def non_document?

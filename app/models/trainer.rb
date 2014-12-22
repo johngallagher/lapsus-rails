@@ -1,5 +1,4 @@
 class Trainer
-  SEARCH_WINDOW = 10
   def self.train_entry(entry, mode)
     entry.untrain
     no_project = entry.project
@@ -10,16 +9,19 @@ class Trainer
       end
     end
 
-    if mode == :last_active && entry.project == no_project && entry.non_document? && entry.started_at
-      previous_entry = Entry.for_user(entry.user).ascending.where('finished_at >= ?', entry.started_at - SEARCH_WINDOW).first
-      if previous_entry && previous_entry.project != no_project && previous_entry != entry
-        entry.project = previous_entry.project 
-      end
-    end
+    adjust_project_for_last_active_mode(entry, no_project) if mode == :last_active
 
     entry.save
     Rails.logger.debug("Trained entry #{entry.inspect}")
     entry
+  end
+
+  def self.adjust_project_for_last_active_mode(entry, no_project)
+    return if entry.project != no_project
+    return if !entry.non_document?
+    return if entry.started_at.nil?
+
+    entry.project = entry.previous.project if entry.previous && entry.previous.project != no_project
   end
 
   def self.train_for(user, mode)
