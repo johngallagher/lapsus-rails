@@ -4,14 +4,21 @@ class Entry < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
 
-  #after_initialize :set_default_project
   before_save :calculate_duration
 
   validates_presence_of :started_at, :finished_at, :project
-  validate :url_must_be_blank_or_valid
+  validate :url_must_be_blank_or_valid, :no_overlapping_entries
 
   scope :ascending, lambda { order('started_at ASC') }
   scope :for_user, lambda { |user| where(user_id: user.id) }
+
+  def no_overlapping_entries
+    return if !started_at_changed? && !finished_at_changed?
+
+    if overlapping_entries.any?
+      self.errors.add('started_at and finished_at', 'overlap other entries')
+    end
+  end
 
   def url_must_be_blank_or_valid
     if url && url.present? 

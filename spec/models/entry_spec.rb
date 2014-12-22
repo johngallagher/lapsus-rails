@@ -60,7 +60,7 @@ describe Entry do
     expect(new_entry(url: '').path).to eq('')
   end
 
-  xit 'marks overlapping entries as invalid' do
+  it 'marks overlapping entries as invalid' do
     entry = create_entry(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00')
     duplicate_entry = create_entry(started_at: '2014-01-01 14:00:00', finished_at: '2014-01-01 15:00:00')
     expect(entry).to be_valid
