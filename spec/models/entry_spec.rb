@@ -13,6 +13,27 @@ describe Entry do
   it { should validate_presence_of :started_at}
   it { should validate_presence_of :finished_at }
 
+  it 'a file url results in entry not being non document' do
+    expect(new_entry(url: 'file:///Users')          ).to_not be_non_document
+    expect(new_entry(url: 'http://www.google.co.uk')).to     be_non_document
+    expect(new_entry(url: '')                       ).to     be_non_document
+    expect(new_entry(url: nil)                      ).to     be_non_document
+  end
+
+  it 'when newing then saving it sets the default project to none' do
+    user = FactoryGirl.create(:user)
+    entry = Entry.new(started_at: Time.now, finished_at: 1.second.ago, user_id: user.id)
+    expect(entry.project).to eq(user.none_project)
+    expect(entry).to be_valid
+  end
+
+  it 'when creating it sets the default project to none' do
+    user = FactoryGirl.create(:user)
+    entry = Entry.create(started_at: Time.now, finished_at: 1.second.ago, user_id: user.id)
+    expect(entry.project).to eq(user.none_project)
+    expect(entry).to be_valid
+  end
+
   it 'should not allow absolute urls without a path' do
     expect(new_entry(url: 'file://')).to be_invalid
   end

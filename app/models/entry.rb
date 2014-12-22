@@ -2,6 +2,8 @@ class Entry < ActiveRecord::Base
   include Pathable
   belongs_to :project
   belongs_to :user
+
+  #after_initialize :set_default_project
   before_save :calculate_duration
 
   validates_presence_of :started_at, :finished_at, :project
@@ -24,6 +26,8 @@ class Entry < ActiveRecord::Base
   end
 
   def non_document?
+    return true if self.url.nil?
+
     URI(self.url).scheme != 'file'
   end
 
@@ -43,5 +47,9 @@ class Entry < ActiveRecord::Base
   private
   def calculate_duration
     self.duration = self.finished_at - self.started_at
+  end
+
+  def set_default_project
+    untrain if self.project.nil?
   end
 end
