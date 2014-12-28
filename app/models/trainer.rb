@@ -20,7 +20,6 @@ class Trainer
     adjust_project_for_last_active_mode(entry, no_project) if mode == :last_active
 
     entry.save
-    Rails.logger.debug("Trained entry #{entry.inspect}")
     entry
   end
 
