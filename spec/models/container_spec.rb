@@ -54,6 +54,16 @@ describe Container do
       ])
     end
 
+    it 'excludes web pages' do
+      FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
+      FactoryGirl.create(:entry, url: 'http://www.google.co.uk/path/to/a/page', user_id: user.id)
+      expect(Container.possible_paths(user)).to eq([
+        '/Users',
+        '/Users/John',
+        '/Users/John/Code'
+      ])
+    end
+
     it 'with no containers and two entries gives combined possible paths' do
       FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
       FactoryGirl.create(:entry, url: 'file:///Users/John/PersonalCode/Home/lapsus/main.rb', user_id: user.id)

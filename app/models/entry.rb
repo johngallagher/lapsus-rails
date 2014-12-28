@@ -11,6 +11,7 @@ class Entry < ActiveRecord::Base
 
   scope :ascending, lambda { order('started_at ASC') }
   scope :for_user, lambda { |user| where(user_id: user.id) }
+  scope :documents, lambda { where('url LIKE ?', "file:/%") }
 
   def no_overlapping_entries
     return if !started_at_changed? && !finished_at_changed?
