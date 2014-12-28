@@ -1,4 +1,12 @@
 class Trainer
+  def self.train_for(user, mode)
+    Project.where(preset: false).delete_all
+
+    Entry.for_user(user).ascending.each do |entry|
+      train_entry(entry, mode)
+    end
+  end
+
   def self.train_entry(entry, mode)
     entry.untrain
     no_project = entry.project
@@ -22,13 +30,5 @@ class Trainer
     return if entry.started_at.nil?
 
     entry.project = entry.previous.project if entry.previous && entry.previous.project != no_project
-  end
-
-  def self.train_for(user, mode)
-    Project.where(preset: false).delete_all
-
-    Entry.for_user(user).ascending.each do |entry|
-      train_entry(entry, mode)
-    end
   end
 end

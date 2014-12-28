@@ -13,6 +13,27 @@ describe Entry do
   it { should validate_presence_of :started_at}
   it { should validate_presence_of :finished_at }
 
+  describe 'previous entry' do
+    it 'with two entries in the search window it chooses the most recent' do
+      entry = FactoryGirl.create(:entry, started_at: 1.second.ago, finished_at: 2.seconds.ago)
+      older_entry = FactoryGirl.create(:entry, started_at: 2.second.ago, finished_at: 3.seconds.ago)
+      oldest_entry = FactoryGirl.create(:entry, started_at: 3.second.ago, finished_at: 4.seconds.ago)
+      expect(entry.previous).to eq(older_entry)
+    end
+
+    it 'with the last entry inside the search window it returns the last entry' do
+      entry = FactoryGirl.create(:entry, started_at: 1.second.ago, finished_at: Time.now)
+      last_entry = FactoryGirl.create(:entry, started_at: Time.now - Entry::SEARCH_WINDOW - 2, finished_at: Time.now - Entry::SEARCH_WINDOW - 1)
+      expect(entry.previous).to eq(last_entry)
+    end
+
+    it 'with the last entry outside the search window it returns nothing' do
+      entry = FactoryGirl.create(:entry, started_at: 1.second.ago, finished_at: Time.now)
+      entry_out_of_range = FactoryGirl.create(:entry, started_at: Time.now - Entry::SEARCH_WINDOW - 3, finished_at: Time.now - Entry::SEARCH_WINDOW - 2)
+      expect(entry.previous).to be_nil
+    end
+  end
+
   it 'a file url results in entry not being non document' do
     expect(new_entry(url: 'file:///Users')          ).to_not be_non_document
     expect(new_entry(url: 'http://www.google.co.uk')).to     be_non_document

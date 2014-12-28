@@ -10,6 +10,7 @@ class Entry < ActiveRecord::Base
   validate :url_must_be_blank_or_valid, :no_overlapping_entries
 
   scope :ascending, lambda { order('started_at ASC') }
+  scope :descending, lambda { order('started_at DESC') }
   scope :for_user, lambda { |user| where(user_id: user.id) }
   scope :documents, lambda { where('url LIKE ?', "file:/%") }
 
@@ -37,7 +38,7 @@ class Entry < ActiveRecord::Base
   def previous
     Entry
       .for_user(self.user)
-      .ascending
+      .descending
       .where.not(id: self.id)
       .where('finished_at >= ? AND finished_at <= ?', self.started_at - SEARCH_WINDOW, self.started_at)
       .first
