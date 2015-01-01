@@ -18,17 +18,43 @@ class Report
   end
 
   def run_time_grouped
-    Entry
+    if range_as_dates.to_a.count == 1
+      run_hour_grouped
+    else
+      run_day_grouped
+    end
+  end
+
+  def run_hour_grouped
+    result = Entry
       .for_user(user)
       .where('started_at > ? and finished_at < ?', from, to)
       .group(:project_id)
       .group_by_hour(:started_at, format: "%01H:00")
       .sum(:duration)
-      .inject({}) do |memo, ((project_id, time_label), value)|
-        memo.merge({
-        [project_id.nil? ? 'None' : Project.find(project_id).name, time_label] => value.to_f / 60
-        })
+      .inject({}) do |memo, ((project_id, time_label), seconds)|
+        minutes = (seconds.to_f / 60).round(2)
+        project_name = Project.find(project_id).name
+        memo.merge({[project_name, time_label] => minutes})
       end
+    result
+  end
+
+  def run_day_grouped
+    result = Entry
+      .for_user(user)
+      .where('started_at > ? and finished_at < ?', from, to)
+      .group(:project_id)
+      .group_by_day(:started_at, format: "%d-%m")
+      .sum(:duration)
+      .inject({}) do |memo, ((project_id, time_label), seconds)|
+        hours = (seconds.to_f / 3600).round(2)
+        project_name = Project.find(project_id).name
+        memo.merge({[project_name, time_label] =>hours })
+      end
+    result
+
+
   end
 
   private
