@@ -17,5 +17,4 @@ describe ApplicationHelper do
     expect(as_hours_and_minutes(120)).to eq('0:02')
     expect(as_hours_and_minutes(3600)).to eq('1:00')
   end
-
 end

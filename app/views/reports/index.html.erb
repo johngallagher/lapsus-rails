@@ -23,7 +23,7 @@
   <% @report.run.to_a.sort { |(_, a_duration), (_, b_duration)| b_duration <=> a_duration }.each do |project, time| %>
     <tr>
       <td><%= project %></td>
-      <td><%= as_hours_and_minutes(time) %></td>
+      <td><%= time  %></td>
     </tr>
   <% end %>
 </table>
