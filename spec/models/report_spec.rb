@@ -88,7 +88,20 @@ describe Report do
         ['rails', '02-01'] => 0.02
       })
     end
+  end
 
+  describe 'report formatting' do
+    it 'with a one day range it formats in minutes' do
+      john = assuming_a_user
+      report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
+      expect(report.format_string).to eq('#m')
+    end
+
+    it 'with a two day range it formats in hours' do
+      john = assuming_a_user
+      report = Report.new(range: '01-01-2014 - 02-01-2014', user: john)
+      expect(report.format_string).to eq('#h')
+    end
   end
 end
 

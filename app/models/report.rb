@@ -18,7 +18,7 @@ class Report
   end
 
   def run_time_grouped
-    if range_as_dates.to_a.count == 1
+    if over_one_day?
       run_hour_grouped
     else
       run_day_grouped
@@ -53,11 +53,17 @@ class Report
         memo.merge({[project_name, time_label] =>hours })
       end
     result
+  end
 
-
+  def format_string
+    over_one_day? ? '#m' : '#h'
   end
 
   private
+  def over_one_day?
+    range_as_dates.to_a.size == 1
+  end
+
   def time_grouped_query
     "select projects.name as project, SUM(entries.duration) as duration, FROM_UNIXTIME(round(UNIX_TIMESTAMP(started_at) / 3600) * 3600) as time
             from entries

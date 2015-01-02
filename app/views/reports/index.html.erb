@@ -8,7 +8,7 @@
 
 <div class="row">
   <div class="col-md-8">
-    <%= column_chart @report.run_time_grouped, stacked: true, library: { vAxis: { format: '#m' }} %>
+    <%= column_chart @report.run_time_grouped, stacked: true, library: { vAxis: { format: @report.format_string }} %>
   </div>
   <div class="col-md-4">
     <%= pie_chart @report.run %>
