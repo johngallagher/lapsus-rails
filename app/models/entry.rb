@@ -9,10 +9,27 @@ class Entry < ActiveRecord::Base
   validates_presence_of :started_at, :finished_at, :project
   validate :url_must_be_blank_or_valid, :no_overlapping_entries
 
-  scope :ascending, lambda { order('started_at ASC') }
-  scope :descending, lambda { order('started_at DESC') }
-  scope :for_user, lambda { |user| where(user_id: user.id) }
-  scope :documents, lambda { where('url LIKE ?', "file:/%") }
+  def self.ascending
+    order('started_at ASC')
+  end
+
+  def self.descending
+    order('started_at DESC')
+  end
+
+  def self.for_user(user)
+    where(user_id: user.id)
+  end
+
+  def self.documents
+    where('url LIKE ?', "file:/%")
+  end
+
+  def self.within_range(range)
+    from = range.begin.at_beginning_of_day.to_s(:db)
+    to = range.end.at_end_of_day.to_s(:db)
+    where('started_at > ? and finished_at < ?', from, to)
+  end
 
   def no_overlapping_entries
     return if !started_at_changed? && !finished_at_changed?

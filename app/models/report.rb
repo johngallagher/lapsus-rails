@@ -2,7 +2,7 @@ class Report < Value.new(:range, :user)
   def run
     Entry
       .for_user(user)
-      .where('started_at > ? and finished_at < ?', from, to)
+      .within_range(range_as_dates)
       .group(:project_id)
       .sum(:duration)
       .inject({}) do |memo, (project_id, seconds)|
@@ -23,7 +23,7 @@ class Report < Value.new(:range, :user)
   def run_hour_grouped
     result = Entry
       .for_user(user)
-      .where('started_at > ? and finished_at < ?', from, to)
+      .within_range(range_as_dates)
       .group(:project_id)
       .group_by_hour(:started_at, format: "%01H:00")
       .sum(:duration)
@@ -38,7 +38,7 @@ class Report < Value.new(:range, :user)
   def run_day_grouped
     result = Entry
       .for_user(user)
-      .where('started_at > ? and finished_at < ?', from, to)
+      .within_range(range_as_dates)
       .group(:project_id)
       .group_by_day(:started_at, format: "%d-%m")
       .sum(:duration)
@@ -55,24 +55,13 @@ class Report < Value.new(:range, :user)
   end
 
   private
-  def over_one_day?
-    range_as_dates.to_a.size == 1
-  end
-
-  def from
-    range_as_dates.begin.at_beginning_of_day.to_s(:db)
-  end
-
-  def to
-    range_as_dates.end.at_end_of_day.to_s(:db)
-  end
-
   def range_as_dates
+    range = @range || Time.now.strftime('%d-%m-%Y - %d-%m-%Y')
     dates_from_range = range.split(' - ').map { |date| DateTime.parse(date) }
     Range.new(*dates_from_range)
   end
 
-  def range
-    @range || Time.now.strftime('%d-%m-%Y - %d-%m-%Y')
+  def over_one_day?
+    range_as_dates.to_a.size == 1
   end
 end
