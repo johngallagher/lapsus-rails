@@ -16,7 +16,7 @@
     <tbody>
     <% @entries.each do |entry| %>
       <tr>
-        <td><%= entry.id%></td>
+        <td><%= entry.id %></td>
         <td><%= entry.started_at.strftime('%H:%M:%S') %></td>
         <td><%= entry.finished_at.strftime('%H:%M:%S') %></td>
         <td><small><%= truncate(entry.url, length: 100) %></small></td>
