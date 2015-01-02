@@ -10,10 +10,10 @@ class Report
       .where('started_at > ? and finished_at < ?', from, to)
       .group(:project_id)
       .sum(:duration)
-      .inject({}) do |memo, (project_id, value)|
-        memo.merge({
-        project_id.nil? ? 'None' : Project.find(project_id).name => value
-        })
+      .inject({}) do |memo, (project_id, seconds)|
+        hours = (seconds.to_f / 3600).round(2)
+        project_name = Project.find(project_id).name
+        memo.merge({ project_name => hours })
       end
   end
 

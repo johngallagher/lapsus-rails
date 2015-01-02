@@ -8,7 +8,7 @@ describe Report do
       assuming_an_entry_for_project(1.minute.ago, Time.now, lapsus, john)
 
       report = Report.new(user: john)
-      expect(report.run).to eq({ 'lapsus' => 60 })
+      expect(report.run).to eq({ 'lapsus' => 0.02 })
     end
 
     it 'only gets times for the specified user' do
@@ -29,7 +29,7 @@ describe Report do
 
       report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
 
-      expect(report.run).to eq({ 'lapsus' => 60 })
+      expect(report.run).to eq({ 'lapsus' => 0.02 })
     end
 
     it 'with two entries for the same project it returns sum for projects' do
@@ -40,7 +40,7 @@ describe Report do
 
       report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
 
-      expect(report.run).to eq({ 'lapsus' => 120 })
+      expect(report.run).to eq({ 'lapsus' => 0.03 })
     end
 
     it 'with two entries for different projects it returns both projects' do
@@ -52,7 +52,7 @@ describe Report do
 
       report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
 
-      expect(report.run).to eq({ 'lapsus' => 60, 'rails' => 60 })
+      expect(report.run).to eq({ 'lapsus' => 0.02, 'rails' => 0.02 })
     end
   end
 
