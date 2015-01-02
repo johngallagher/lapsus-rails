@@ -7,7 +7,7 @@ describe Report do
       lapsus = assuming_a_project_for_user('lapsus', john)
       assuming_an_entry_for_project(1.minute.ago, Time.now, lapsus, john)
 
-      report = Report.new(user: john)
+      report = Report.with(user: john)
       expect(report.run).to eq({ 'lapsus' => 0.02 })
     end
 
@@ -17,7 +17,7 @@ describe Report do
       lapsus = assuming_a_project_for_user('lapsus', john)
       assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
 
-      report = Report.new(range: '01-01-2014 - 01-01-2014', user: mike)
+      report = Report.with(range: '01-01-2014 - 01-01-2014', user: mike)
 
       expect(report.run).to eq({})
     end
@@ -27,7 +27,7 @@ describe Report do
       lapsus = assuming_a_project_for_user('lapsus', john)
       assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
 
-      report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
+      report = Report.with(range: '01-01-2014 - 01-01-2014', user: john)
 
       expect(report.run).to eq({ 'lapsus' => 0.02 })
     end
@@ -38,7 +38,7 @@ describe Report do
       assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
       assuming_an_entry_for_project('01-01-2014 00:02:00', '01-01-2014 00:03:00', lapsus, john)
 
-      report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
+      report = Report.with(range: '01-01-2014 - 01-01-2014', user: john)
 
       expect(report.run).to eq({ 'lapsus' => 0.03 })
     end
@@ -50,7 +50,7 @@ describe Report do
       assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
       assuming_an_entry_for_project('01-01-2014 00:02:00', '01-01-2014 00:03:00', rails, john)
 
-      report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
+      report = Report.with(range: '01-01-2014 - 01-01-2014', user: john)
 
       expect(report.run).to eq({ 'lapsus' => 0.02, 'rails' => 0.02 })
     end
@@ -64,7 +64,7 @@ describe Report do
       assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
       assuming_an_entry_for_project('01-01-2014 00:02:00', '01-01-2014 00:03:00', rails, john)
 
-      report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
+      report = Report.with(range: '01-01-2014 - 01-01-2014', user: john)
 
       expect(report.run_time_grouped).to eq({
         ['lapsus', '0:00'] => 1.0,
@@ -79,7 +79,7 @@ describe Report do
       assuming_an_entry_for_project('01-01-2014 00:01:00', '01-01-2014 00:02:00', lapsus, john)
       assuming_an_entry_for_project('02-01-2014 00:01:00', '02-01-2014 00:02:00', rails, john)
 
-      report = Report.new(range: '01-01-2014 - 02-01-2014', user: john)
+      report = Report.with(range: '01-01-2014 - 02-01-2014', user: john)
 
       expect(report.run_time_grouped).to eq({
         ['lapsus', '01-01'] => 0.02,
@@ -93,13 +93,13 @@ describe Report do
   describe 'report formatting' do
     it 'with a one day range it formats in minutes' do
       john = assuming_a_user
-      report = Report.new(range: '01-01-2014 - 01-01-2014', user: john)
+      report = Report.with(range: '01-01-2014 - 01-01-2014', user: john)
       expect(report.format_string).to eq('#m')
     end
 
     it 'with a two day range it formats in hours' do
       john = assuming_a_user
-      report = Report.new(range: '01-01-2014 - 02-01-2014', user: john)
+      report = Report.with(range: '01-01-2014 - 02-01-2014', user: john)
       expect(report.format_string).to eq('#h')
     end
   end

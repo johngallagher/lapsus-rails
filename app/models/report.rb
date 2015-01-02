@@ -1,9 +1,4 @@
-require 'active_support/core_ext/date_time/calculations'
-
-class Report
-  include ActiveModel::Model
-  attr_accessor :range, :user
-
+class Report < Value.new(:range, :user)
   def run
     Entry
       .for_user(user)

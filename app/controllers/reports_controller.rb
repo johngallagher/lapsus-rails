@@ -2,7 +2,7 @@ class ReportsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @report = Report.new(report_params)
+    @report = Report.with(report_params)
 
     render :index
   end

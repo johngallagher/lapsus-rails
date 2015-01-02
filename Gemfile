@@ -17,6 +17,7 @@ gem 'devise'
 gem 'doorkeeper'
 gem 'chartkick'
 gem 'groupdate'
+gem 'values'
 
 group :production do
   gem 'rails_12factor'
