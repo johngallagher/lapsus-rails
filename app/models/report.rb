@@ -64,22 +64,6 @@ class Report
     range_as_dates.to_a.size == 1
   end
 
-  def time_grouped_query
-    "select projects.name as project, SUM(entries.duration) as duration, FROM_UNIXTIME(round(UNIX_TIMESTAMP(started_at) / 3600) * 3600) as time
-            from entries
-            inner join projects on entries.`project_id` = projects.`id`
-            where entries.started_at > '#{from}' and entries.finished_at < '#{to}' and entries.user_id = #{user.id}
-            group by time;"
-  end
-
-  def query
-    "select projects.name as project, SUM(entries.duration) as time
-            from entries
-            inner join projects on entries.`project_id` = projects.`id`
-            where entries.started_at > '#{from}' and entries.finished_at < '#{to}' and entries.user_id = #{user.id}
-            group by project_id;"
-  end
-
   def from
     range_as_dates.begin.at_beginning_of_day.to_s(:db)
   end
