@@ -1,4 +1,7 @@
-class Report < Value.new(:range, :user)
+class Report
+  include ActiveModel::Model
+  attr_accessor :range, :user
+
   def run
     Entry
       .for_user(user)
