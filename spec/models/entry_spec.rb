@@ -13,6 +13,7 @@ describe Entry do
   it { should validate_presence_of :started_at}
   it { should validate_presence_of :finished_at }
 
+
   describe 'previous entry' do
     it 'with two entries in the search window it chooses the most recent' do
       entry = FactoryGirl.create(:entry, started_at: 1.second.ago, finished_at: 2.seconds.ago)

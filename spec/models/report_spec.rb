@@ -1,6 +1,43 @@
 require 'spec_helper'
 
 describe Report do
+  it 'excludes times just before and includes times just after range' do
+    john = assuming_a_user
+    FactoryGirl.create(:entry, 
+                       started_at: '2014-01-01 23:59:00',
+                       finished_at: '2014-01-02 00:00:00')
+    FactoryGirl.create(:entry, 
+                       started_at: '2014-01-02 00:00:00',
+                       finished_at: '2014-01-02 00:01:00')
+    report = Report.with(range: '02-01-2014 - 02-01-2014', user: john)
+    expect(report.run).to eq({ 'None' => 0.02 })
+  end
+
+  it 'includes times at either end of range' do
+    john = assuming_a_user
+    FactoryGirl.create(:entry, 
+                       started_at: '2014-01-02 00:00:00',
+                       finished_at: '2014-01-02 00:01:00')
+    FactoryGirl.create(:entry, 
+                       started_at: '2014-01-02 23:59:00',
+                       finished_at: '2014-01-03 00:00:00')
+    report = Report.with(range: '02-01-2014 - 02-01-2014', user: john)
+    expect(report.run).to eq({ 'None' => 0.03 })
+  end
+
+  it 'excludes times just after range and includes times near the end' do
+    john = assuming_a_user
+    FactoryGirl.create(:entry, 
+                       started_at: '2014-01-02 23:59:00',
+                       finished_at: '2014-01-03 00:00:00')
+    FactoryGirl.create(:entry, 
+                       started_at: '2014-01-03 00:00:00',
+                       finished_at: '2014-01-03 00:01:00')
+    report = Report.with(range: '02-01-2014 - 02-01-2014', user: john)
+    expect(report.run).to eq({ 'None' => 0.02 })
+  end
+
+
   describe 'non time grouped report' do
     it 'defaults to today for the range' do
       john = assuming_a_user

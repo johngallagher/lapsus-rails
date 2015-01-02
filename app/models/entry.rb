@@ -26,9 +26,9 @@ class Entry < ActiveRecord::Base
   end
 
   def self.within_range(range)
-    from = range.begin.at_beginning_of_day.to_s(:db)
-    to = range.end.at_end_of_day.to_s(:db)
-    where('started_at > ? and finished_at < ?', from, to)
+    from = range.begin.at_beginning_of_day
+    to = (range.end + 1.day).at_beginning_of_day
+    where('started_at >= ? and finished_at <= ?', from, to)
   end
 
   def no_overlapping_entries

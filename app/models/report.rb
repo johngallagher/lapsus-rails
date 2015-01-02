@@ -54,14 +54,13 @@ class Report < Value.new(:range, :user)
     over_one_day? ? '#m' : '#h'
   end
 
-  private
   def range_as_dates
-    range = @range || Time.now.strftime('%d-%m-%Y - %d-%m-%Y')
-    dates_from_range = range.split(' - ').map { |date| DateTime.parse(date) }
+    range = @range || Time.now.in_time_zone.strftime('%d-%m-%Y - %d-%m-%Y')
+    dates_from_range = range.split(' - ').map { |date| Time.zone.parse(date) }
     Range.new(*dates_from_range)
   end
 
   def over_one_day?
-    range_as_dates.to_a.size == 1
+    range_as_dates.begin == range_as_dates.end
   end
 end
