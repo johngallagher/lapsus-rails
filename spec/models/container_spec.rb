@@ -25,6 +25,12 @@ describe Container do
       expect(container.contains_project_for_entry?(entry)).to eq(true)
     end
 
+    it 'a folder within a container contains a project' do
+      container = FactoryGirl.create(:container, path: '/Users/John/Code')
+      entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/', user_id: user.id)
+      expect(container.contains_project_for_entry?(entry)).to eq(true)
+    end
+
     it 'a document at the same level as a container is non project' do
       container = FactoryGirl.create(:container, path: '/Users/John/Code')
       entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/notes.md', user_id: user.id)

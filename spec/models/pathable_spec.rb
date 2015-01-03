@@ -6,17 +6,22 @@ end
 
 describe Pathable do
   it 'returns path components' do
-    mixed_in = DummyClass.new('/Users/John/Code')
-    expect(mixed_in.path_components).to eq(['Users', 'John', 'Code'])
+    pathable = DummyClass.new('/Users/John/Code')
+    expect(pathable.path_components).to eq(['Users', 'John', 'Code'])
+  end
+
+  it 'gets a path component for the folder if it ends in a slash' do
+    pathable = DummyClass.new('/Users/John/Code/')
+    expect(pathable.path_components).to eq(['Users', 'John', 'Code', ''])
   end
 
   it 'gets directory heirarchy' do
-    mixed_in = DummyClass.new('/Users/John/Code')
-    expect(mixed_in.path_heirarchy).to eq(['/Users', '/Users/John', '/Users/John/Code'])
+    pathable = DummyClass.new('/Users/John/Code')
+    expect(pathable.path_heirarchy).to eq(['/Users', '/Users/John', '/Users/John/Code'])
   end
 
   it 'when no path it gets an empty directory heirarchy' do
-    mixed_in = DummyClass.new('')
-    expect(mixed_in.path_heirarchy).to eq([])
+    pathable = DummyClass.new('')
+    expect(pathable.path_heirarchy).to eq([])
   end
 end

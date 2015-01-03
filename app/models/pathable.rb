@@ -4,7 +4,9 @@ module Pathable
   end
     
   def path_components
-    Pathname.new(path).each_filename.to_a
+    filenames = Pathname.new(path).each_filename.to_a
+    filenames << '' if path.ends_with?('/')
+    filenames
   end
 
   def path_heirarchy
