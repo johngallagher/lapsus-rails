@@ -3,8 +3,8 @@ class ProjectsController < ApplicationController
 
   def index
     @container = Container.new
-    @container_paths = Container.possible_paths(current_user)
-    @containers = Container.for_user(current_user)
-    @projects = Project.for_user(current_user)
+    @container_paths = current_user.possible_container_paths
+    @containers = current_user.containers
+    @projects = current_user.projects
   end
 end

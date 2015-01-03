@@ -5,10 +5,6 @@ class Container < ActiveRecord::Base
 
   scope :for_user, lambda { |user| where(user_id: user.id) }
 
-  def self.possible_paths(user)
-    user.entries.possible_paths - user.containers.path_heirarchies
-  end
-
   def self.path_heirarchies
     all
       .map { |container| container.path_heirarchy }

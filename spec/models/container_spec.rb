@@ -44,50 +44,6 @@ describe Container do
     end
   end
 
-  describe 'possible paths' do
-    it 'with no containers and one entry gives all possible container paths' do
-      FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
-      expect(Container.possible_paths(user)).to eq([
-        '/Users',
-        '/Users/John',
-        '/Users/John/Code'
-      ])
-    end
-
-    it 'excludes web pages' do
-      FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
-      FactoryGirl.create(:entry, url: 'http://www.google.co.uk/path/to/a/page', user_id: user.id)
-      expect(Container.possible_paths(user)).to eq([
-        '/Users',
-        '/Users/John',
-        '/Users/John/Code'
-      ])
-    end
-
-    it 'with no containers and two entries gives combined possible paths' do
-      FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
-      FactoryGirl.create(:entry, url: 'file:///Users/John/PersonalCode/Home/lapsus/main.rb', user_id: user.id)
-      expect(Container.possible_paths(user)).to eq([
-        '/Users',
-        '/Users/John',
-        '/Users/John/Code',
-        '/Users/John/PersonalCode',
-        '/Users/John/PersonalCode/Home'
-      ])
-    end
-
-    it 'with a container it excludes all conflicting upper directories' do
-      FactoryGirl.create(:container, path: '/Users/John', user_id: user.id)
-      FactoryGirl.create(:entry, url: 'file:///Users/John/Work/Programming/rails/Gemfile', user_id: user.id)
-      FactoryGirl.create(:entry, url: 'file:///Users/Mike/Personal/gems/lapsus/main.rb', user_id: user.id)
-
-      expect(Container.possible_paths(user)).to eq([
-        '/Users/Mike',
-        '/Users/Mike/Personal',
-        '/Users/Mike/Personal/gems'
-      ])
-    end
-  end
 end
 
 def assuming_a_user

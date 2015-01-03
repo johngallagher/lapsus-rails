@@ -9,6 +9,10 @@ class User < ActiveRecord::Base
 
   after_create :create_none_project
 
+  def possible_container_paths
+    entries.possible_paths - containers.path_heirarchies
+  end
+
   def none_project
     Project.none_for_user(self)
   end
