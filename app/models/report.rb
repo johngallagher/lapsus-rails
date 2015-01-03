@@ -56,9 +56,12 @@ class Report
   def format_string
     over_one_day? ? '#m' : '#h'
   end
+  
+  def range
+    @range || Time.current.strftime('%d-%m-%Y - %d-%m-%Y')
+  end
 
   def range_as_dates
-    range = @range || Time.now.in_time_zone.strftime('%d-%m-%Y - %d-%m-%Y')
     dates_from_range = range.split(' - ').map { |date| Time.zone.parse(date) }
     Range.new(*dates_from_range)
   end

@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe Report do
+  it 'defaults to the current day' do
+    time = Time.parse('2014-02-03 04:05:06')
+    allow(Time).to receive(:current).and_return(time)
+    expect(Report.new.range).to eq('03-02-2014 - 03-02-2014')
+  end
+
   it 'excludes times just before and includes times just after range' do
     john = assuming_a_user
     FactoryGirl.create(:entry, 
