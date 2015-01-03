@@ -19,7 +19,7 @@ class Container < ActiveRecord::Base
   end
 
   def project_name_from_entry(entry)
-    entry.path_components[path_depth]
+    CGI::unescape(entry.path_components[path_depth])
   end
 
   def project_path_from_entry(entry)

@@ -6,6 +6,12 @@ describe Container do
   it { should validate_presence_of :path }
   it { should belong_to :user }
 
+  it 'creates a project name from the entry and decodes it' do
+    entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/Time%20Tracking/Gemfile')
+    container = FactoryGirl.create(:container, path: '/Users/John/Code')
+    expect(container.project_name_from_entry(entry)).to eq('Time Tracking')
+  end
+
   it 'with an entry two levels below the container it creates the project path' do
     entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile')
     container = FactoryGirl.create(:container, path: '/Users/John/Code')
