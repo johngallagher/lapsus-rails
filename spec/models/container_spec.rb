@@ -4,6 +4,7 @@ describe Container do
   let(:user) { FactoryGirl.create(:user) }
 
   it { should validate_presence_of :path }
+  it { should belong_to :user }
 
   it 'with an entry two levels below the container it creates the project path' do
     entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile')
@@ -44,7 +45,6 @@ describe Container do
   end
 
   describe 'possible paths' do
-
     it 'with no containers and one entry gives all possible container paths' do
       FactoryGirl.create(:entry, url: 'file:///Users/John/Code/rails/Gemfile', user_id: user.id)
       expect(Container.possible_paths(user)).to eq([
@@ -86,23 +86,6 @@ describe Container do
         '/Users/Mike/Personal',
         '/Users/Mike/Personal/gems'
       ])
-    end
-
-    it 'when theres a container and another entry the possible paths exclude subdirectories of the container' do
-      FactoryGirl.create(:container, path: '/Users/John')
-      entry = FactoryGirl.create(:entry, url: 'file:///Users/Mike/Documents/CourtCase/hearing.doc')
-      expect(Container.possible_paths_for(entry, Container.all)).to eq(['/Users', '/Users/Mike', '/Users/Mike/Documents'])
-    end
-
-    it 'when theres a container the possible paths exclude subdirectories of the container' do
-      FactoryGirl.create(:container, path: '/Users')
-      entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/lapsus/main.rb')
-      expect(Container.possible_paths_for(entry, Container.all)).to eq([])
-    end
-
-    it 'returns possible container paths' do
-      entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/lapsus/main.rb')
-      expect(Container.possible_paths_for(entry, Container.all)).to eq(['/Users', '/Users/John', '/Users/John/Code'])
     end
   end
 end

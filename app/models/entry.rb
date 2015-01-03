@@ -31,6 +31,23 @@ class Entry < ActiveRecord::Base
     where('started_at >= ? and finished_at <= ?', from, to)
   end
 
+  def self.possible_paths
+    documents
+      .map { |entry| entry.possible_paths }
+      .flatten
+      .uniq
+  end
+
+  def possible_paths
+    possible_paths = path_heirarchy[0..-3]
+    user.containers.map(&:path).each do |path|
+      index_of_container_path = possible_paths.index(path)
+      possible_paths.slice!(index_of_container_path..-1) if index_of_container_path
+    end
+    possible_paths
+  end
+
+
   def no_overlapping_entries
     return if !started_at_changed? && !finished_at_changed?
 

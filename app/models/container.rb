@@ -1,23 +1,19 @@
 class Container < ActiveRecord::Base
   include Pathable
   validates_presence_of :path
+  belongs_to :user
 
   scope :for_user, lambda { |user| where(user_id: user.id) }
 
   def self.possible_paths(user)
-    containers = Container.for_user(user)
-    from_entries = Entry.for_user(user).documents.map { |entry| possible_paths_for(entry, containers) }.flatten.uniq
-    from_containers = containers.map { |container| container.path_heirarchy }.flatten.uniq
-    from_entries - from_containers
+    user.entries.possible_paths - user.containers.path_heirarchies
   end
 
-  def self.possible_paths_for(entry, containers)
-    possible_paths = entry.path_heirarchy[0..-3]
-    containers.map(&:path).each do |path|
-      index_of_container_path = possible_paths.index(path)
-      possible_paths.slice!(index_of_container_path..-1) if index_of_container_path
-    end
-    possible_paths
+  def self.path_heirarchies
+    all
+      .map { |container| container.path_heirarchy }
+      .flatten
+      .uniq
   end
 
   def contains_project_for_entry?(entry)

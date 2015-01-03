@@ -195,6 +195,26 @@ describe Entry do
     entry = create_entry(project_id: project.id)
     expect(entry.project.name).to eq('John')
   end
+
+  describe 'possible paths' do
+    it 'when theres a container and another entry the possible paths exclude subdirectories of the container' do
+      FactoryGirl.create(:container, path: '/Users/John')
+      entry = FactoryGirl.create(:entry, url: 'file:///Users/Mike/Documents/CourtCase/hearing.doc')
+      expect(entry.possible_paths).to eq(['/Users', '/Users/Mike', '/Users/Mike/Documents'])
+    end
+
+    it 'when theres a container the possible paths exclude subdirectories of the container' do
+      user = FactoryGirl.create(:user)
+      FactoryGirl.create(:container, path: '/Users', user: user)
+      entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/lapsus/main.rb', user: user)
+      expect(entry.possible_paths).to eq([])
+    end
+
+    it 'returns possible container paths' do
+      entry = FactoryGirl.create(:entry, url: 'file:///Users/John/Code/lapsus/main.rb')
+      expect(entry.possible_paths).to eq(['/Users', '/Users/John', '/Users/John/Code'])
+    end
+  end
 end
 
 def create_project(attrs={})
