@@ -9,6 +9,21 @@
 <script type="text/javascript">
 
 function loadDatePicker() {
+  $('#timeline_report_range').daterangepicker({
+    format: 'DD-MM-YYYY',
+    opens: 'left',
+    ranges: {
+      'Today': [new Date(), new Date()],
+      'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+      '2 Days Ago': [moment().subtract(2, 'days'), moment().subtract(2, 'days')],
+      'Last 7 Days': [moment().subtract(6, 'days'), new Date()]
+    },
+    maxDate: new Date()
+  },
+  function(start, end) {
+    $('#report_form').submit();
+  });
+
   $('#report_range').daterangepicker({
     format: 'DD-MM-YYYY',
     opens: 'left',

@@ -1,31 +1,44 @@
-<h1>Entries</h1>
-<div class="table-responsive">
-  <table class='table table-condensed'>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>URL</th>
-        <th>Duration</th>
-        <th>Project</th>
-        <th>Application Bundle ID</th>
-      </tr>
-    </thead>
+<div class="row">
+  <%= form_for(@timeline_report, url: entries_path, method: :get, html: {id: 'report_form'}) do |form| %>
+    <div class="input-group pull-right">
+      <%= form.text_field(:range, class: 'form-control') %>
+    </div>
+  <% end %>
+</div>
+<div class="row">
+  <% number_of_projects = @entries.map(&:project).uniq.count %>
+  <% height = ((number_of_projects * 60) + 10).to_s + "px" %>
+  <%= timeline @timeline_report.run, height: height %>
+</div>
+<div class="row">
+  <div class="table-responsive">
+    <table class='table table-condensed'>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>URL</th>
+          <th>Duration</th>
+          <th>Project</th>
+          <th>Application Bundle ID</th>
+        </tr>
+      </thead>
 
-    <tbody>
-    <% @entries.each do |entry| %>
-      <tr>
-        <td><%= entry.id %></td>
-        <td><%= entry.started_at.strftime('%H:%M:%S') %></td>
-        <td><%= entry.finished_at.strftime('%H:%M:%S') %></td>
-        <td><small><%= truncate(entry.url, length: 100) %></small></td>
-        <td><%= as_hours_and_minutes_and_seconds(entry.duration) %></td>
-        <td><%= entry.project ? entry.project.name : 'ERROR' %></td>
-        <td><%= entry.application_bundle_id %></td>
-      </tr>
-    <% end %>
-    </tbody>
+      <tbody>
+      <% @entries.each do |entry| %>
+        <tr>
+          <td><%= entry.id %></td>
+          <td><%= entry.started_at.strftime('%H:%M:%S') %></td>
+          <td><%= entry.finished_at.strftime('%H:%M:%S') %></td>
+          <td><small><%= truncate(entry.url, length: 100) %></small></td>
+          <td><%= as_hours_and_minutes_and_seconds(entry.duration) %></td>
+          <td><%= entry.project ? entry.project.name : 'ERROR' %></td>
+          <td><%= entry.application_bundle_id %></td>
+        </tr>
+      <% end %>
+      </tbody>
 
-  </table>
+    </table>
+  </div>
 </div>
