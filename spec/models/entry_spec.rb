@@ -13,6 +13,70 @@ describe Entry do
   it { should validate_presence_of :started_at}
   it { should validate_presence_of :finished_at }
 
+  describe 'entry creation' do
+    it 'when entry is within an hour boundary it doesnt break it up' do
+      entries = Entry.new_split_by_hour({ started_at: '2014-01-01 00:30:00', finished_at: '2014-01-01 00:40:00', url: 'url'})
+      expect(entries.count).to eq(1)
+
+      expect(entries.first.started_at).to  eq(Time.zone.parse('2014-01-01 00:30:00'))
+      expect(entries.first.finished_at).to eq(Time.zone.parse('2014-01-01 00:40:00'))
+      expect(entries.first.url).to         eq('url')
+    end
+
+    it 'when entry overlaps an hour boundary break into two separate chunks' do
+      entries = Entry.new_split_by_hour({ started_at: '2014-01-01 00:30:00', finished_at: '2014-01-01 01:30:00', url: 'url'})
+
+      expect(entries.count).to eq(2)
+
+      expect(entries.first.started_at).to  eq(Time.zone.parse('2014-01-01 00:30:00'))
+      expect(entries.first.finished_at).to eq(Time.zone.parse('2014-01-01 00:30:00').end_of_hour)
+      expect(entries.first.url).to         eq('url')
+
+      expect(entries.second.started_at).to  eq(Time.zone.parse('2014-01-01 01:00:00'))
+      expect(entries.second.finished_at).to eq(Time.zone.parse('2014-01-01 01:30:00'))
+      expect(entries.second.url).to         eq('url')
+    end
+
+    it 'when entry overlaps a two hour boundary break into three separate chunks' do
+      entries = Entry.new_split_by_hour({ started_at: '2014-01-01 00:30:00', finished_at: '2014-01-01 02:30:00', url: 'url'})
+
+      expect(entries.count).to eq(3)
+
+      expect(entries.first.started_at).to  eq(Time.zone.parse('2014-01-01 00:30:00'))
+      expect(entries.first.finished_at).to eq(Time.zone.parse('2014-01-01 00:30:00').end_of_hour)
+      expect(entries.first.url).to         eq('url')
+
+      expect(entries.second.started_at).to  eq(Time.zone.parse('2014-01-01 01:00:00'))
+      expect(entries.second.finished_at).to eq(Time.zone.parse('2014-01-01 01:00:00').end_of_hour)
+      expect(entries.second.url).to         eq('url')
+
+      expect(entries.third.started_at).to  eq(Time.zone.parse('2014-01-01 02:00:00'))
+      expect(entries.third.finished_at).to eq(Time.zone.parse('2014-01-01 02:30:00'))
+      expect(entries.third.url).to         eq('url')
+    end
+
+    it 'when entry overlaps a three hour boundary break into four separate chunks' do
+      entries = Entry.new_split_by_hour({ started_at: '2014-01-01 00:30:00', finished_at: '2014-01-01 03:30:00', url: 'url'})
+
+      expect(entries.count).to eq(4)
+
+      expect(entries.first.started_at).to  eq(Time.zone.parse('2014-01-01 00:30:00'))
+      expect(entries.first.finished_at).to eq(Time.zone.parse('2014-01-01 00:30:00').end_of_hour)
+      expect(entries.first.url).to         eq('url')
+
+      expect(entries.second.started_at).to  eq(Time.zone.parse('2014-01-01 01:00:00'))
+      expect(entries.second.finished_at).to eq(Time.zone.parse('2014-01-01 01:00:00').end_of_hour)
+      expect(entries.second.url).to         eq('url')
+
+      expect(entries.third.started_at).to  eq(Time.zone.parse('2014-01-01 02:00:00'))
+      expect(entries.third.finished_at).to eq(Time.zone.parse('2014-01-01 02:00:00').end_of_hour)
+      expect(entries.third.url).to         eq('url')
+
+      expect(entries.fourth.started_at).to  eq(Time.zone.parse('2014-01-01 03:00:00'))
+      expect(entries.fourth.finished_at).to eq(Time.zone.parse('2014-01-01 03:30:00'))
+      expect(entries.fourth.url).to         eq('url')
+    end
+  end
 
   describe 'previous entry' do
     it 'with two entries in the search window it chooses the most recent' do

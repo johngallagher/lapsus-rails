@@ -9,6 +9,34 @@ class Entry < ActiveRecord::Base
   validates_presence_of :started_at, :finished_at, :project
   validate :url_must_be_blank_or_valid, :no_overlapping_entries
 
+  def self.split_into_hours(start, finish)
+    grouped = [[ start, start.end_of_hour ]]
+
+    boundary = start.end_of_hour + 1.hour
+    while finish > boundary.end_of_hour
+      grouped << [boundary.beginning_of_hour, boundary.end_of_hour]
+      boundary += 1.hour
+    end
+
+    grouped << [finish.beginning_of_hour, finish]
+    grouped
+  end
+
+  def self.new_split_by_hour(attrs)
+    started_at = Time.zone.parse(attrs[:started_at])
+    finished_at = Time.zone.parse(attrs[:finished_at])
+
+    within_the_same_hour = finished_at < started_at.end_of_hour
+    if within_the_same_hour
+      [Entry.new(attrs)] 
+    else
+      split_into_hours(started_at, finished_at).map do |(partition_start, partition_end)|
+        partition_attrs = attrs.merge({ started_at: partition_start, finished_at:  partition_end })
+        Entry.new(partition_attrs)
+      end
+    end
+  end
+
   def self.ascending
     order('started_at ASC')
   end
@@ -46,7 +74,6 @@ class Entry < ActiveRecord::Base
     end
     possible_paths
   end
-
 
   def no_overlapping_entries
     return if !started_at_changed? && !finished_at_changed?

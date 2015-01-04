@@ -3,9 +3,7 @@ class Api::V1::EntriesController < ApplicationController
   respond_to :json
 
   def create
-    entries = params[:entries].map do |entry|
-      Entry.new(entry.permit(:started_at, :finished_at, :url, :application_bundle_id, :application_name).merge(user_id: current_resource_owner_id))
-    end
+    entries = params[:entries].map { |attrs| Entry.new_split_by_hour(entry_attrs(attrs)) }.flatten
 
     trained_entries = trained(entries)
     if invalid(trained_entries).empty?
@@ -28,5 +26,11 @@ class Api::V1::EntriesController < ApplicationController
 
   def current_resource_owner_id
     doorkeeper_token.resource_owner_id
+  end
+
+  def entry_attrs(attrs)
+    attrs
+      .permit(:started_at, :finished_at, :url, :application_bundle_id, :application_name)
+      .merge(user_id: current_resource_owner_id)
   end
 end
