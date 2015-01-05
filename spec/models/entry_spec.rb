@@ -14,6 +14,15 @@ describe Entry do
   it { should validate_presence_of :finished_at }
 
   describe 'entry creation' do
+    it 'when started_at or finished_at is blank it returns nil start and end' do
+      entries = Entry.new_split_by_hour({ url: 'url'})
+      expect(entries.count).to eq(1)
+
+      expect(entries.first.started_at).to  be_nil
+      expect(entries.first.finished_at).to be_nil
+      expect(entries.first.url).to         eq('url')
+    end
+
     it 'when entry is within an hour boundary it doesnt break it up' do
       entries = Entry.new_split_by_hour({ started_at: '2014-01-01 00:30:00', finished_at: '2014-01-01 00:40:00', url: 'url'})
       expect(entries.count).to eq(1)

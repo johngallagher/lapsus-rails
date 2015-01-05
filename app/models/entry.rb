@@ -23,6 +23,8 @@ class Entry < ActiveRecord::Base
   end
 
   def self.new_split_by_hour(attrs)
+    return [Entry.new(attrs)] if attrs.values_at(:started_at, :finished_at).any?(&:nil?)
+
     started_at = Time.zone.parse(attrs[:started_at])
     finished_at = Time.zone.parse(attrs[:finished_at])
 
