@@ -27,6 +27,7 @@ class Entry < ActiveRecord::Base
 
     started_at = Time.zone.parse(attrs[:started_at])
     finished_at = Time.zone.parse(attrs[:finished_at])
+    return [Entry.new(attrs)] if started_at.blank? || finished_at.blank?
 
     within_the_same_hour = finished_at < started_at.end_of_hour
     if within_the_same_hour

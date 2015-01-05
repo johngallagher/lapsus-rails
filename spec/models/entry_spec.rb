@@ -15,6 +15,15 @@ describe Entry do
 
   describe 'entry creation' do
     it 'when started_at or finished_at is blank it returns nil start and end' do
+      entries = Entry.new_split_by_hour({ started_at: '', finished_at: '', url: 'url'})
+      expect(entries.count).to eq(1)
+
+      expect(entries.first.started_at).to  be_nil
+      expect(entries.first.finished_at).to be_nil
+      expect(entries.first.url).to         eq('url')
+    end
+
+    it 'when started_at or finished_at is nil it returns nil start and end' do
       entries = Entry.new_split_by_hour({ url: 'url'})
       expect(entries.count).to eq(1)
 
