@@ -1,19 +1,48 @@
 -- create entries from events
-   begin ;
-  create temp table entries
-      on commit
-    drop as
-  select 
-  time as started_at, 
-  lead (time, 1) over (order by time) as finished_at,
-  (lead (time, 1) over (order by time) - time) as duration,
-  regexp_split_to_array(url, E'(:///|://|:/)'),
-  url,
-  application_bundle_id,
-  application_name 
+ begin ;
+  drop table if exists entries;
+  create table entries 
+  as
+    select 
+      time                                                                          as started_at, 
+      lead (time, 1) over (order by time)                                           as finished_at,
+      (lead (time, 1) over (order by time) - time)                                  as duration,
+      (regexp_split_to_array(url, E'(:///|://|:/)'))[1]                             as schema,
+      regexp_split_to_array((regexp_split_to_array(url, E'(:///|://|:/)'))[2], '/') as path_components,
+      (regexp_split_to_array(url, E'(:///|://|:/)'))[2]                             as path,
+      application_bundle_id,
+      application_name 
     from events;
-  select *
-    from entries; commit;
+
+  create temp table temp_containers on commit drop
+  as 
+    select 
+      regexp_split_to_array(substring(path from 2), '/') as container_path_components,
+      array_length(regexp_split_to_array(substring(path from 2), '/'), 1) as container_path_components_length
+    from containers;
+
+  drop table if exists projects;
+  create table projects 
+  as 
+    select distinct 
+      schema, 
+      path_components[(container_path_components_length + 1)] as project_name, 
+      path_components[1:(container_path_components_length + 1)] as project_path_components 
+    from entries cross join temp_containers 
+    where 
+      path_components[1:container_path_components_length] = container_path_components and
+      path_components[(container_path_components_length + 1)] <> '';
+
+commit;
+
+drop sequence project_id_seq;
+create sequence project_id_seq;
+alter table projects add column id bigserial;
+
+select * from projects;
+
+select * from entries;
+\d+ projects;
 
 -- Calculate last active project
 drop function if exists calculated_project(cumulative_project integer, project integer, url varchar) cascade;
