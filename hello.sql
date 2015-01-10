@@ -1,7 +1,7 @@
 -- create entries from events
  begin ;
-  drop table if exists entries;
-  create table entries 
+
+  create temp table entries_without_project on commit drop 
   as
     select 
       time                                                                          as started_at, 
@@ -26,23 +26,23 @@
   as 
     select distinct 
       schema, 
-      path_components[(container_path_components_length + 1)] as project_name, 
-      path_components[1:(container_path_components_length + 1)] as project_path_components 
-    from entries cross join temp_containers 
+      path_components[(container_path_components_length + 1)] as name, 
+      path_components[1:(container_path_components_length + 1)] as path_components,
+      (container_path_components_length + 1) as path_components_length
+    from entries_without_project cross join temp_containers 
     where 
       path_components[1:container_path_components_length] = container_path_components and
       path_components[(container_path_components_length + 1)] <> '';
 
-commit;
+    drop sequence project_id_seq;
+    create sequence project_id_seq;
+    alter table projects add column id bigserial;
 
-drop sequence project_id_seq;
-create sequence project_id_seq;
-alter table projects add column id bigserial;
+
+commit;
 
 select * from projects;
 
-select * from entries;
-\d+ projects;
 
 -- Calculate last active project
 drop function if exists calculated_project(cumulative_project integer, project integer, url varchar) cascade;
