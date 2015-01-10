@@ -1,5 +1,22 @@
-drop function if exists calculated_project(cumulative_project integer, project integer, url varchar) cascade;
+-- create entries from events
+   begin ;
+  create temp table entries
+      on commit
+    drop as
+  select 
+  time as started_at, 
+  lead (time, 1) over (order by time) as finished_at,
+  (lead (time, 1) over (order by time) - time) as duration,
+  regexp_split_to_array(url, E'(:///|://|:/)'),
+  url,
+  application_bundle_id,
+  application_name 
+    from events;
+  select *
+    from entries; commit;
 
+-- Calculate last active project
+drop function if exists calculated_project(cumulative_project integer, project integer, url varchar) cascade;
 create function calculated_project(cumulative_project integer, project integer, url varchar) returns integer as $$
 begin
   if substring(url from 0 for 8) = 'file://' then
@@ -10,33 +27,32 @@ begin
 end;
 $$ language plpgsql;
 
-CREATE AGGREGATE agg_calc_project(integer, varchar)
+create aggregate agg_calc_project(integer, varchar)
 (
     sfunc = calculated_project,
     stype = integer
 );
 
-select 
-entries.id,
-started_at, 
-finished_at, 
-substring(url from 0 for 8) as schema,
-project_id,
-agg_calc_project(project_id, url) over(order by started_at asc) as calc,
-url
-from 
-entries 
-inner join projects on entries.project_id = projects.id 
-where 
-started_at > '2014-12-17 05:43:09'
-order by started_at asc;
+-- create table events as
+-- select 
+-- started_at as time,
+-- 'document_change' as type,
+-- application_bundle_id,
+-- application_name,
+-- url
+-- from entries 
+-- where url != ''
+-- order by started_at asc;
 
--- lag(name, 1) over(order by started_at asc) as last_project,
--- update entries set project_id = 4 where id = 9907;
-
--- select * from entries where id = 9908;
-
-create or replace function add_em(integer, integer) returns integer as $$
-  select $1 + $2;
-$$ language sql;
+-- select 
+-- entries.id,
+-- started_at, 
+-- finished_at, 
+-- substring(url from 0 for 8) as schema,
+-- project_id,
+-- agg_calc_project(project_id, url) over(order by started_at asc) as calc,
+-- url
+-- from entries 
+-- inner join projects on entries.project_id = projects.id 
+-- order by started_at asc;
 
