@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141217214211) do
+ActiveRecord::Schema.define(version: 20150111152544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 20141217214211) do
     t.string   "application_bundle_id"
     t.string   "application_name"
     t.string   "url"
+  end
+
+  create_table "events", id: false, force: true do |t|
+    t.datetime "time"
+    t.string   "type",                  limit: nil
+    t.string   "application_bundle_id", limit: nil
+    t.string   "application_name",      limit: nil
+    t.string   "url",                   limit: nil
+    t.integer  "user_id"
   end
 
   create_table "oauth_access_grants", force: true do |t|
@@ -64,12 +73,13 @@ ActiveRecord::Schema.define(version: 20141217214211) do
   add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
 
   create_table "oauth_applications", force: true do |t|
-    t.string   "name",         null: false
-    t.string   "uid",          null: false
-    t.string   "secret",       null: false
-    t.text     "redirect_uri", null: false
+    t.string   "name",                      null: false
+    t.string   "uid",                       null: false
+    t.string   "secret",                    null: false
+    t.text     "redirect_uri",              null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "scopes",       default: "", null: false
   end
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
